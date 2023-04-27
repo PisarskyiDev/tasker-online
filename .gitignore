@@ -1,3 +1,5 @@
 .idea
 venv
 **.sqlite3
+__pycache__/
+catalog/migrations
