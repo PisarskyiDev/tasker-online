@@ -359,7 +359,7 @@
           {% if request.user.is_authenticated %}
             <li class="nav-item ms-lg-auto">
               <a class="nav-link nav-link-icon me-2" 
-                href="{% url 'logout' %}">
+                href="{% url 'catalog:logout' %}">
                 <i class="fa fa-sign-out me-1"></i>
                 <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
               </a>

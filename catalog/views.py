@@ -1,8 +1,17 @@
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 
-from catalog.models import Worker, Task, TaskType, Position
+from .forms import (
+    LoginForm,
+)
+from .models import (
+    Worker,
+    Task,
+    TaskType,
+    Position,
+)
 
 
 # @login_required
@@ -27,6 +36,21 @@ def index(request):
     return render(request, "home/index.html", context=context)
 
 
-class WorkersListView(generic.ListView):
-    template_name = "home/workers"
+class LoginView(generic.FormView):
+    form_class = LoginForm
+    success_url = '/'
+    template_name = 'accounts/login.html'
 
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(
+            self.request,
+            username=username,
+            password=password,
+        )
+        if user is not None:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)

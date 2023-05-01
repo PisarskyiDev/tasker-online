@@ -127,11 +127,11 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (BASE_DIR / "static",)
 
-ASSETS_ROOT = "static/assets"
+ASSETS_ROOT = STATIC_URL + "assets"
 
 
 # Default primary key field type
