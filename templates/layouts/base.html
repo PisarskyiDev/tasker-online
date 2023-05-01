@@ -7,6 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="{{ ASSETS_ROOT }}/img/apple-icon.png">
   <link rel="icon" type="image/png" href="{{ ASSETS_ROOT }}/img/logo-6-1.png">
 
+
   <title>
     Task Manager - {% block title %}{% endblock %} | AppSeed
   </title>
@@ -30,11 +31,11 @@
 
 <body class="{% block body_class %}{% endblock %} bg-gray-200">
 
-  {% block content %}{% endblock content %}  
+  {% block content %}{% endblock content %}
 
-  {% include 'includes/footer.html' %} 
+  {% include 'includes/footer.html' %}
 
-  {% include 'includes/scripts.html' %} 
+  {% include 'includes/scripts.html' %}
 
    <!-- Specific Page JS goes HERE  -->
    {% block javascripts %}{% endblock javascripts %}

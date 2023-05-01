@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="{{ ASSETS_ROOT }}/img/logo-6-1.png">
   <link rel="icon" type="image/png" href="{{ ASSETS_ROOT }}/img/logo-6-1.png">
+  <link rel="icon" type="image/png" href="{{ ASSETS_ROOT }}/img/logo-6-1.png">
 
   <title>
     Task Manager
@@ -29,7 +30,7 @@
   {% include 'includes/navigation.html' %}
 
   <header class="header-2">
-    <div class="page-header min-vh-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/bg2.jpg')">
+    <div class="page-header min-vh-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/bg_abstract.jpeg')">
       <span class="mask bg-gradient-dark opacity-4"></span>
       <div class="container">
         <div class="row">
@@ -82,51 +83,8 @@
       </div>
     </section>
   </div>
-
-  <footer class="footer pt-5 mt-5">
-    <div class="container">
-      <div class=" row">
-        <div class="col-md-3 mb-4 ms-auto">
-          <div>
-            <a href="https://github.com/Soobig666">
-              <img src="{{ ASSETS_ROOT }}/img/logo-6-1.png" class="mb-3 footer-logo" alt="main_logo">
-            </a>
-            <h6 class="font-weight-bolder mb-4">Task Manager</h6>
-          </div>
-          <div>
-            <ul class="d-flex flex-row ms-n3 nav">
-              <li class="nav-item">
-                <a class="nav-link pe-1" href="https://github.com/Soobig666" target="_blank">
-                  <i class="fab fa-github text-lg opacity-8"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-2 col-sm-6 col-6 mb-4">
-          <div>
-            <h6 class="text-sm">Company</h6>
-            <ul class="flex-column ms-n3 nav">
-              <li class="nav-item">
-                <a class="nav-link" href="https://github.com/Soobig666" target="_blank">
-                  About Me
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-2 col-sm-6 col-6 mb-4">
-
-        </div>
-        <div class="col-12">
-          <div class="text-center">
-            <p class="text-dark my-4 text-sm font-weight-normal">
-              &copy; <a href="#" target="_blank"></a> - Coded By Soobig666.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <footer>
+    {% include 'includes/footer.html' %}
   </footer>
 
   <!--   Core JS Files   -->
