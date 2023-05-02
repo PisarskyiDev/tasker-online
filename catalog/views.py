@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
 from .forms import (
-    LoginForm,
+    LoginForm, RegistrationForm,
 )
 from .models import (
     Worker,
@@ -14,7 +15,6 @@ from .models import (
 )
 
 
-# @login_required
 def index(request):
     num_task = Task.objects.count()
     num_task_solved = Task.objects.filter(is_completed=True).count()
@@ -23,8 +23,6 @@ def index(request):
     num_position = Position.objects.count()
     num_task_type = TaskType.objects.count()
 
-    # num_visits = request.session.get ("num_visits", 0)
-    # request.session["num_visits"] = num_visits
     context = {
         "num_task": num_task,
         "num_worker": num_worker,
@@ -54,3 +52,9 @@ class LoginView(generic.FormView):
             return super().form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+class SignUpView(generic.CreateView):
+    form_class = RegistrationForm
+    success_url = reverse_lazy('catalog:login')
+    template_name = 'accounts/register.html'

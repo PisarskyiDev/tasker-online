@@ -1,18 +1,17 @@
   <!-- Navbar Transparent -->
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
     <div class="container">
-      <a class="navbar-brand  text-white " href="/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
+      <a class="navbar-brand text-white" href="{% url 'catalog:index' %}" rel="tooltip" title="Coded by Soobig666" data-placement="bottom">
         Task Manager
       </a>
-
           {% if request.user.is_authenticated %}
             <li class="nav-item ms-lg-auto">
-              <a class="nav-link nav-link-icon me-2" 
+              <a class="nav-link nav-link-icon me-2"
                 href="{% url 'catalog:logout' %}">
                 <i class="fa fa-sign-out me-1"></i>
                 <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
               </a>
-            </li>          
+            </li>
           {% endif %}
 
     </div>
