@@ -18,60 +18,56 @@
       <div class="row">
         <div class="col-lg-4 col-md-8 col-12 mx-auto">
           <div class="card z-index-0 fadeIn3 animate__animated animate__backInLeft animate__fast fadeInBottom">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-dark shadow-primary border-radius-lg py-3 pe-1">
-                <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
-                  Task Manager
-                </h4>
-                <div class="row mt-3">
-                  <p class="mb-0 text-white text-center">
-                    {% if msg %}
-                      {{ msg | safe }}
-                    {% else %}
-                      Enter your credentials
-                    {% endif %}
-                  </p>
+            <a href="{% url 'catalog:index' %}">
+              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-dark shadow-primary border-radius-lg py-3 pe-1">
+                  <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
+                    Task Manager
+                  </h4>
+                  <div class="row mt-3">
+                    <p class="mb-0 text-white text-center">
+                      {% if msg %}
+                        {{ msg | safe }}
+                      {% else %}
+                        Enter your credentials
+                      {% endif %}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </a>
+          <div class="card-body">
             <div class="card-body">
-              <div class="card-body">
-                {% if form.errors %}
-                  <div class="alert" role="alert">
-                    Your username and password didn't match. Please try again.
+              {% if form.errors %}
+                <div class="alert" role="alert">
+                  Your username and password didn't match. Please try again.
+                </div>
+              {% endif %}
+                <form role="form" method="POST" class="mx-auto m-lg-1">
+                  {% csrf_token %}
+                  <div class="">
+                    <div class="shadow rounded-3">
+                      {{ form.username|as_crispy_field }}
+                    </div>
+                    <div class="shadow rounded-3 m-lg-1">
+                      {{ form.password|as_crispy_field }}
+                    </div>
                   </div>
-                {% endif %}
-                  <form role="form" method="POST" class="text-center mx-auto">
-                    {% csrf_token %}
-                    <div class="rounded shadow-sm mb-2">
-                      <div class="form-floating">
-                        <input type="text" class="form-control m-lg-2" id="floatingInput">
-                          <label>
-                            {{ form.username|as_crispy_field }}
-                          </label>
-                      </div>
-                      <div class="form-floating">
-                        <input type="password" class="form-control m-lg-2" id="floatingPassword">
-                          <label class="">
-                            {{ form.password|as_crispy_field }}
-                          </label>
-                      </div>
-                    </div>
-                    <div class="form-group text-center">
-                      <button class="w-35 btn btn-lg btn-dark bg-gradient-dark" type="submit">Sign in</button>
-                    </div>
-                  </form>
-              </div>
-              <div class="form-check form-switch d-flex align-items-center mb-3">
-                <input class="form-check-input" type="checkbox" id="rememberMe">
-                <label class="form-check-label mb-0 ms-2" for="rememberMe">Remember me</label>
-              </div>
-              <p class="mt-4 text-sm text-center">
-                Don't have an account?
-                <a href="{% url 'catalog:registrate' %}" class="text-dark text-gradient font-weight-bold">Sign UP</a>
-              </p>
+                  <div class="form-group text-center">
+                    <button class="w-35 mt-2 btn btn-lg btn-dark bg-gradient-dark" type="submit">Sign in</button>
+                  </div>
+                </form>
             </div>
+            <div class="form-check form-switch d-flex align-items-center mb-3">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label mb-0 ms-2" for="rememberMe">Remember me</label>
+            </div>
+            <p class="mt-4 text-sm text-center">
+              Don't have an account?
+              <a href="{% url 'catalog:registrate' %}" class="text-dark text-gradient font-weight-bold">Sign UP</a>
+            </p>
           </div>
+        </div>
         </div>
       </div>
     </div>
