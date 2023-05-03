@@ -46,7 +46,7 @@
                   <button type="button" class="btn btn-sm btn-outline-secondary task-status-btn {% if task.is_completed %}bg-gradient-success{% else %}bg-gradient-warning{% endif %}" data-task-id="{{ task.pk }}" data-is-completed="{{ task.is_completed }}">
                       {{ task.is_completed|yesno:"Done,Reopen" }}
                   </button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark">Edit</button>
+                  <a href="{% url 'catalog:task_url_detail' task.pk %}" type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark">Edit</a>
                   <button type="button" class="btn btn-sm btn-outline-secondary bg-gradient-danger">Delete</button>
                 </div>
                   {% if task.priority == '!!!' %}

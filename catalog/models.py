@@ -39,9 +39,10 @@ class Worker(AbstractUser):
 
 class Task(models.Model):
     STR_CHOICES = [
-        ("!!!", "Urgent"),
-        ("!!", "Usually"),
-        ("!", "Deliberately"),
+        ("!!!", "Extra priority"),
+        ("!!", "Priority"),
+        ("!", "Standard"),
+        ("", "No priority"),
     ]
 
     name = models.CharField(max_length=255)

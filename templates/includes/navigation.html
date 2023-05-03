@@ -40,30 +40,27 @@
               </li>
 
               {% if request.user.is_authenticated %}
-                <ul>
-                  <li class="shadow-dark nav-item ms-lg-auto">
-                    <a class="nav-link nav-link-icon me-2"
-                      href="{{ user.get_absolute_url }}">
-                      <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile">{{ user.get_username }}</p>
-                    </a>
-                  </li>
-
-                </ul>
-                <ul>
-                  <li class="shadow-dark nav-item ms-lg-auto">
+                <div class=" nav-item ms-lg-auto ">
+                  <a class="nav-link nav-link-icon me-2"
+                    href="{{ user.get_absolute_url }}">
+                    <p class="d-inline text-sm z-index-1 font-weight-bold"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile">{{ user.get_username }}</p>
+                  </a>
+                </div>
+                <ul style="padding: 0">
+                  <div class="shadow-dark rounded-3 nav-item ms-lg-auto" >
                     <a class="nav-link nav-link-icon me-2"
                       href="{% url 'catalog:logout' %}?next={{ request.path }}">
-                      <i class="fa fa-sign-out me-1"></i>
-                      <p class="d-inline text-sm z-index-1 font-weight-bold " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
+                      <i class="fa rounded-3 fa-sign-out me-1"></i>
+                      <p class="d-inline  text-sm z-index-1 font-weight-bold " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
                     </a>
-                  </li>
+                  </div>
                 </ul>
               {% else %}
-                <li>
+                <div class="rounded-3">
                   <a href="{% url 'catalog:login' %}?next={{ request.path }}" class="shadow-dark dropdown-item border-radius-md">
                     <span>Sign In</span>
                   </a>
-                </li>
+                </div>
               {% endif %}
 
             </ul>

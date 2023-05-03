@@ -5,7 +5,7 @@ from django.contrib.auth import forms as auth
 from django import forms
 from django.forms import DateInput
 
-from .models import Worker, Position, Task
+from .models import Worker, Position, Task, TaskType
 
 
 class LoginForm(auth.AuthenticationForm):
@@ -78,13 +78,10 @@ class TaskUpdateForm(forms.ModelForm):
         ]
         widgets = {
             "assignees": forms.CheckboxSelectMultiple(),
-            "task_type": forms.CheckboxSelectMultiple(),
+            "priority": forms.RadioSelect(),
+            "task_type": forms.RadioSelect(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Save'))
-        # Add crispy classes to priority field
-        self.fields['priority'].widget.attrs.update({'class': 'form-select'})
+        self.fields['priority'].required = False

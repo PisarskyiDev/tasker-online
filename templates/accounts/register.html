@@ -8,18 +8,29 @@
 {% block body_class %} sign-in-basic {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <style>
+    .form-control {
+      mask: 1px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+
+  </style>
+{% endblock stylesheets %}
 
 {% block content %}
 
 {% include 'includes/navigation-transparent.html' %}
 
-  <div class="page-header align-items-start min-vh-100" style="background-image: url('{{ ASSETS_ROOT }}/img/bg_registratre.jpeg');" loading="lazy">
+  <div class="page-header align-items-start min-vh-100 animate__animated animate__fadeIn" style="background-image: url('{{ ASSETS_ROOT }}/img/bg_registratre.jpeg');" loading="lazy">
     <span class="mask bg-gradient-dark opacity-6"></span>
     <div class="container my-auto">
       <div class="row">
         <div class="col-lg-4 col-md-8 col-12 mx-auto">
-          <div class="card mt-5 animate__animated animate__backInLeft animate__fast z-index-0 fadeIn3 fadeInBottom">
+          <div class="card mt-5 animate__animated animate__backInLeft animate__fast z-index-0 fadeIn3 fadeInBottom" style="min-width: 350px">
             <a href="{% url 'catalog:index' %}">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-dark shadow-primary border-radius-lg py-3 pe-1">
@@ -41,7 +52,7 @@
             <div class="card-body">
             {% if not success %}
 
-            <form role="form" method="post" action="">
+            <form class="" role="form" method="post" action="">
               {% csrf_token %}
               {{ form|crispy}}
 
