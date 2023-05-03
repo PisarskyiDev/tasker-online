@@ -1,11 +1,8 @@
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, Div
-from crispy_forms.layout import Submit
 from django.contrib.auth import forms as auth
 from django import forms
 from django.forms import DateInput
 
-from .models import Worker, Position, Task, TaskType
+from .models import Worker, Position, Task
 
 
 class LoginForm(auth.AuthenticationForm):
@@ -43,12 +40,8 @@ class RegistrationForm(auth.UserCreationForm):
         return self.cleaned_data['position'].get()
 
 
-class TaskBaseForm(forms.ModelForm):
+class TaskForm(forms.ModelForm):
     deadline = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
-    assignees = forms.ModelMultipleChoiceField(
-        queryset=Worker.objects.all(),
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-label'})
-    )
 
     class Meta:
         model = Task
@@ -56,22 +49,6 @@ class TaskBaseForm(forms.ModelForm):
             "name",
             "description",
             "deadline",
-            "priority",
-            "task_type",
-            "assignees",
-        ]
-
-
-class TaskCreateForm(TaskBaseForm):
-    pass
-
-
-class TaskUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Task
-        fields = [
-            "name",
-            "description",
             "priority",
             "task_type",
             "assignees",

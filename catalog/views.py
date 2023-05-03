@@ -11,8 +11,7 @@ from django.views.decorators.http import require_POST
 from .forms import (
     LoginForm,
     RegistrationForm,
-    TaskCreateForm,
-    TaskUpdateForm,
+    TaskForm,
 )
 from .models import (
     Worker,
@@ -98,46 +97,18 @@ def update_task_status(request, pk):
     return JsonResponse({'is_completed': task.is_completed})
 
 
-# class TaskDetailView(LoginRequiredMixin, generic.DetailView):
-#     model = Task
-#     template_name = 'catalog/task_detail.html'
-
-
 class TaskDetailView(LoginRequiredMixin, generic.UpdateView):
     model = Task
-    form_class = TaskUpdateForm
+    form_class = TaskForm
     template_name = 'catalog/task_detail.html'
     success_url = reverse_lazy('catalog:task_url_list')
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
-    form_class = TaskCreateForm
-    template_name = "catalog/task_form.html"
-    fields = [
-        "name",
-        "description",
-        "deadline",
-        "is_completed",
-        "priority",
-        "task_type",
-        "assignees",
-    ]
-
-
-class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = Task
-    form_class = TaskUpdateForm
-    template_name = "catalog/task_form.html"
-    fields = [
-        "name",
-        "description",
-        "deadline",
-        "is_completed",
-        "priority",
-        "task_type",
-        "assignees",
-    ]
+    form_class = TaskForm
+    template_name = "catalog/task_create.html"
+    success_url = reverse_lazy('catalog:task_url_list')
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):

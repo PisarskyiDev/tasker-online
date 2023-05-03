@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %} Template Page {% endblock %} 
+
+{% block body_class %} index-page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    .form-control {
+      mask: 1px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+  {% include 'includes/navigation.html' %}
+
+  <div class="page-header min-vh-80 animate__animated animate__fadeIn" style="background-image: url('{{ ASSETS_ROOT }}/img/bg_coding.jpeg')">
+    <span class="mask bg-gradient-dark opacity-6"></span>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="text-center">
+            <h1 class="text-white animate__animated animate__delay-1s animate__fadeIn ">Task name: {{ object.name }}</h1>
+            <h3 class="text-white animate__animated animate__delay-1s animate__fadeIn">Deadline is: {{ object.deadline }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-body shadow-xl  mx-3 mx-md-4 mt-n6" style="min-width: 400px;">
+    <div class="container">
+      <div class="section text-center">
+        <div class="container animate__animated animate__backInUp" style="max-width: 55%;">
+          <form class="rounded-3 mx-auto m-lg-1" role="form" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
