@@ -1,5 +1,6 @@
 from django.contrib.auth import forms as auth
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import DateInput
 
 from .models import Worker, Position, Task
@@ -14,10 +15,6 @@ class RegistrationForm(auth.UserCreationForm):
     username = forms.CharField(label='Username', required=True)
     first_name = forms.CharField(label='First name', required=False)
     email = forms.EmailField(label='Email', required=True)
-    position = forms.ModelMultipleChoiceField(
-        queryset=Position.objects.all(),
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-label'})
-    )
 
     class Meta(auth.UserCreationForm.Meta):
         model = Worker
@@ -28,6 +25,9 @@ class RegistrationForm(auth.UserCreationForm):
             'last_name',
             'position',
         )
+        widgets = {
+            "position": forms.RadioSelect(),
+        }
 
     def save(self, commit=True):
         worker = super().save(commit=False)
@@ -35,9 +35,6 @@ class RegistrationForm(auth.UserCreationForm):
             worker.save()
             self.save_m2m()
         return worker
-
-    def clean_position(self):
-        return self.cleaned_data['position'].get()
 
 
 class TaskForm(forms.ModelForm):
@@ -62,3 +59,42 @@ class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['priority'].required = False
+
+
+class ProfileForm(forms.ModelForm):
+
+    def __init__(self, request, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        current_user = request.user
+        # <-- if current_user.is_superuser then he can edit eny profile -->
+        if current_user.is_superuser:
+            self.fields['date_joined'].disabled = True
+            self.fields['date_joined'].required = False
+            self.fields['username'].required = True
+        # <-- if current_user.is_superuser he can edit only own profile-->
+        if not current_user.is_superuser and self.instance.pk != current_user.id:
+            print(self.instance.is_superuser)
+            print(current_user.is_superuser)
+            self.fields['username'].disabled = True
+            self.fields['first_name'].disabled = True
+            self.fields['last_name'].disabled = True
+            self.fields['email'].disabled = True
+            self.fields['date_joined'].disabled = True
+            self.fields['position'].disabled = True
+
+    class Meta:
+        model = Worker
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "date_joined",
+            "position",
+        ]
+        widgets = {
+            "position": forms.RadioSelect(),
+        }
+
+
+

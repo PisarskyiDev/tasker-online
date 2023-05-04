@@ -23,7 +23,7 @@
       <div class="row">
         <div class="col-md-8 mx-auto">
           <div class="text-center">
-            <h1 class="text-white animate__animated animate__delay-1s animate__fadeIn ">Active Tasks: {{ num_task_actual }}</h1>
+            <h1 class="text-white animate__animated animate__delay-1s animate__fadeIn ">All Active Tasks: {{ num_task_actual }}</h1>
             <h3 class="text-white animate__animated animate__delay-1s animate__fadeIn ">Today is: {{ today }}</h3>
             <a href="{% url 'catalog:task_url_create' %}" type="button" class=" animate__animated animate__delay-1s animate__fadeIn btn btn-lg btn-outline-secondary bg-gradient-success">Create new Task</a>
           </div>
@@ -39,15 +39,32 @@
         {% for task in tasks_view_list %}
         <div class="col  animate__animated animate__backInLeft">
           <div class="card shadow-primary">
-            <a href="{% url 'catalog:task_url_detail' task.pk %}">
-              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                <title>{{ task.name }}</title>
-                <rect width="100%" height="100%" fill="#55595c"/>
-                <text x="50%" y="50%" fill="#eceeef" dy=".3em" text-anchor="middle">{{ task.name }}</text>
-              </svg>
-            </a>
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <a href="{% url 'catalog:task_url_detail' task.pk %}">
+              <rect width="100%" height="100%" fill="#55595c"></rect>
+              <text x="50%" y="50%" fill="#eceeef" dy=".3em" text-anchor="middle">
+                Task-name: {{ task.name }}
+                </text>
+              </a>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Assignees</th>
+                      <th>Position</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for assignee in assignees %}
+                    <tr>
+                      <td text-anchor="middle" ><a href="{% url 'catalog:profile_url_detail' assignee.pk %}">{{ assignee.username }}</a></td>
+                      <td>{{ assignee.position }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </svg>
             <div class="card-body">
-              <p class="card-text">{{ task.description }}</p>
+              <p class="card-text">Description: {{ task.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <button type="button" class="btn btn-sm btn-outline-secondary delete-task-btn task-status-btn {% if task.is_completed %}bg-gradient-success{% else %}bg-gradient-warning{% endif %}" data-task-id="{{ task.pk }}" data-is-completed="{{ task.is_completed }}">
@@ -79,7 +96,7 @@
           </div>
         </div>
         {% empty %}
-          <h1 class="text-center">No tasks found</h1>
+          <h1 class="">No tasks found</h1>
         {% endfor %}
       </div>
     </div>

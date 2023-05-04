@@ -1,9 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class TaskType(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     class Meta:
         ordering = ['name']
@@ -13,7 +14,7 @@ class TaskType(models.Model):
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=155)
+    name = models.CharField(max_length=155, unique=True)
 
     class Meta:
         ordering = ['name']
@@ -25,8 +26,6 @@ class Position(models.Model):
 class Worker(AbstractUser):
     position = models.ForeignKey(to=Position, on_delete=models.DO_NOTHING, null=True)
     username = models.CharField(max_length=100, unique=True, blank=True)
-    first_name = models.CharField(max_length=100)
-    las_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.username
@@ -35,6 +34,9 @@ class Worker(AbstractUser):
         verbose_name = "Worker"
         verbose_name_plural = "Workers"
         ordering = ["position"]
+
+    def get_absolute_url(self):
+        return reverse('catalog:profile_url_detail', args=[str(self.id)])
 
 
 class Task(models.Model):
@@ -51,7 +53,7 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=True)
     priority = models.CharField(max_length=3, choices=STR_CHOICES)
     task_type = models.ForeignKey(to=TaskType, on_delete=models.DO_NOTHING)
-    assignees = models.ManyToManyField(to=Worker)
+    assignees = models.ManyToManyField(to=Worker, related_name='assignees')
 
     def __str__(self):
         return self.name
