@@ -9,6 +9,7 @@ from catalog.views import (
     TaskDetailView,
     update_task_status,
     TaskCreateView,
+    TaskDeleteView,
 )
 
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     path("task/create/", TaskCreateView.as_view(), name="task_url_create"),
     path('task/<int:pk>/update_status/', update_task_status, name='update_task_status'),
     path("task/<int:pk>/", TaskDetailView.as_view(), name="task_url_detail"),
+    path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task_url_delete"),
     path("registrate/", SignUpView.as_view(), name="registrate"),
     path('logout/', LogoutView.as_view(next_page='catalog:index'), name='logout')
 ]

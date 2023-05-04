@@ -84,6 +84,9 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
                 task.days_left = "Today is deadline"
             else:
                 task.days_left = str(days_left) + " " + "days left"
+        context['num_task_actual'] = Task.objects.filter(is_completed=True).count()
+        context['today'] = date.today()
+
         return context
 
 
@@ -113,6 +116,4 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
-    template_name = "catalog/task_confirm_delete.html"
-    success_url = reverse_lazy("tasks")
-
+    success_url = reverse_lazy('catalog:task_url_list')
