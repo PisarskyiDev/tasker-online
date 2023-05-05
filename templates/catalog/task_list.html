@@ -1,0 +1,147 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Template Page {% endblock %} 
+
+{% block body_class %} index-page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->TaskListView
+{% block stylesheets %}
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/list-groups/">
+
+  <link href="{{ ASSETS_ROOT }}/list-groups.css" rel="stylesheet">
+
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  {% include 'includes/navigation.html' %}
+  <div class="page-header min-vh-80 animate__animated animate__fadeIn" style="background-image: url('{{ ASSETS_ROOT }}/img/bg_pc.png')">
+    <span class="mask bg-gradient-dark opacity-6"></span>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="text-center">
+            <h1 class="text-white animate__animated animate__delay-1s animate__fadeIn ">All Active Tasks: {{ num_task_actual }}</h1>
+            <h3 class="text-white animate__animated animate__delay-1s animate__fadeIn ">Today is: {{ today }}</h3>
+            <a href="{% url 'catalog:task_url_create' %}" type="button" class=" animate__animated animate__delay-1s animate__fadeIn btn btn-lg btn-outline-secondary bg-gradient-success">Create new Task</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="mt-5 mt-md-5 album py-5 bg-body-tertiary">
+    <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for task in tasks_view_list %}
+        <div class="col  animate__animated animate__backInLeft">
+          <div class="card shadow-primary">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <a href="{% url 'catalog:task_url_detail' task.pk %}">
+              <rect width="100%" height="100%" fill="#55595c"></rect>
+              <text x="50%" y="50%" fill="#eceeef" dy=".3em" text-anchor="middle">
+                Task-name: {{ task.name }}
+                </text>
+              </a>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Assignees</th>
+                      <th>Position</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for assignee in assignees %}
+                    <tr>
+                      <td text-anchor="middle" ><a href="{% url 'catalog:profile_url_detail' assignee.pk %}">{{ assignee.username }}</a></td>
+                      <td>{{ assignee.position }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </svg>
+            <div class="card-body">
+              <p class="card-text">Description: {{ task.description }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary delete-task-btn task-status-btn {% if task.is_completed %}bg-gradient-success{% else %}bg-gradient-warning{% endif %}" data-task-id="{{ task.pk }}" data-is-completed="{{ task.is_completed }}">
+                      {{ task.is_completed|yesno:"Done,Reopen" }}
+                  </button>
+                  <a href="{% url 'catalog:task_url_detail' task.pk %}" type="button" class="btn btn-sm btn-secondary">Edit</a>
+                  <a href="{% url 'catalog:task_url_delete' task.pk %}" type="button" class="btn btn-sm bg-gradient-primary">Delete</a>
+                </div>
+                  {% if task.priority == '!!!' %}
+                    <small class="text-body-secondary">
+                      <h4 class="text-danger">{{ task.priority }}</h4>
+                    </small>
+                  {% elif task.priority == '!!' %}
+                    <small class="text-body-secondary">
+                      <h4 class="text-warning">{{ task.priority }}</h4>
+                    </small>
+                  {% elif task.priority == '!' %}
+                    <small class="text-body-secondary">
+                      <h4 class="text-success">{{ task.priority }}</h4>
+                    </small>
+                  {% endif %}
+                  {% if task.is_completed %}
+                  <small class="text-body-secondary">{{ task.days_left }}</small>
+                  {% else %}
+                  <small class="text-body-secondary">task closed</small>
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+          <h1 class="">No tasks found</h1>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+  <script src="{{ ASSETS_ROOT }}/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  $(document).ready(function() {
+      // Обработчик кликов на кнопках "Done"
+      $('.task-status-btn').on('click', function(event) {
+          event.preventDefault();
+          var button = $(this);
+          var taskId = button.data('task-id');
+          var isCompleted = button.data('is-completed');
+          $.ajax({
+              url: '/task/' + taskId + '/update_status/',
+              type: 'POST',
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  is_completed: !isCompleted
+              },
+              dataType: 'json',
+              success: function(data) {
+                  button.data('is-completed', data.is_completed);
+                  button.text(data.is_completed ? 'Done' : 'Reopen');
+                  if (data.is_completed) {
+                      button.removeClass('bg-gradient-warning').addClass('bg-gradient-success');
+                  } else {
+                      button.removeClass('bg-gradient-success').addClass('bg-gradient-warning');
+                  }
+                },
+              error: function(xhr, textStatus, errorThrown) {
+                  console.error(textStatus, errorThrown);
+              }
+          });
+      });
+  });
+</script>
+
+
+
+{% endblock javascripts %}
