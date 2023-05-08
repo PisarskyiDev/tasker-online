@@ -148,3 +148,13 @@ class ProfileView(LoginRequiredMixin, generic.UpdateView):
 
             return HttpResponseForbidden("You are not allowed to edit this profile.")
         return super().form_valid(form)
+
+
+def page_not_found(request, exception):
+    return render(request, 'http_response/page-404.html', status=404)
+
+def permission_denied(request, exception):
+    return render(request, 'http_response/page-403.html', status=403)
+
+def server_error(request):
+    return render(request, 'http_response/page-500.html', status=500)

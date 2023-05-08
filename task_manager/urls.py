@@ -19,6 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from catalog import views
+
+handler404 = views.page_not_found
+handler403 = views.permission_denied
+handler500 = views.server_error
+
 urlpatterns = [
     path('', include('catalog.urls', namespace="catalog")),
     path('admin/', admin.site.urls),
