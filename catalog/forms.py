@@ -1,9 +1,8 @@
 from django.contrib.auth import forms as auth
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import DateInput
 
-from .models import Worker, Position, Task
+from .models import Worker, Task
 
 
 class LoginForm(auth.AuthenticationForm):
@@ -73,8 +72,6 @@ class ProfileForm(forms.ModelForm):
             self.fields['username'].required = True
         # <-- if current_user.is_superuser he can edit only own profile-->
         if not current_user.is_superuser and self.instance.pk != current_user.id:
-            print(self.instance.is_superuser)
-            print(current_user.is_superuser)
             self.fields['username'].disabled = True
             self.fields['first_name'].disabled = True
             self.fields['last_name'].disabled = True

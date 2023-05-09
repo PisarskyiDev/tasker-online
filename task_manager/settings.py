@@ -11,27 +11,33 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j)_8&@v-v=7!@^v=#1i96v0*_%6krz33a#up9enu!c3^+=%fwk'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-j)_8&@v-v=7!@^v=#1i96v0*_%6krz33a#up9enu!c3^+=%fwk')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DJANGO_DEBUG', False)
 
 INTERNAL_IPS = [
+    os.getenv('DJANGO_ALLOWED_HOST'),
     "127.0.0.1",
 ]
 
 ALLOWED_HOSTS = [
+    os.getenv('DJANGO_ALLOWED_HOST'),
     "127.0.0.1",
 ]
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
 
 
 # Application definition
@@ -58,7 +64,6 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'task_manager.middleware.ErrorHandlerMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -91,12 +96,24 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "postgresql":
+    DATABASES = {
+      'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'appseed_db'),
+        'USER': os.getenv('POSTGRES_USERNAME', 'appseed_db_usr'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'pass'),
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': os.getenv('POSTGRES_PORT', 3306),
+        },
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -139,13 +156,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
+# STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+STATIC_ROOT = "static"
+MEDIA_ROOT = "media"
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (BASE_DIR / "static",)
+# STATICFILES_DIRS = (
+#     os.path.join(CORE_DIR, 'static'),
+# )
 
-ASSETS_ROOT = STATIC_URL + "assets"
+ASSETS_ROOT = '/static/assets'
 
 
 # Default primary key field type
