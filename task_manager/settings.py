@@ -160,10 +160,10 @@ STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(CORE_DIR, './static'),
+    os.path.join(CORE_DIR, 'static'),
 )
 
-ASSETS_ROOT = os.path.join('ASSETS_ROOT', '/static/assets')
+ASSETS_ROOT = '/static/assets'
 
 
 # Default primary key field type
