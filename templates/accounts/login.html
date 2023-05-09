@@ -49,11 +49,6 @@
             </a>
           <div class="card-body">
             <div class="card-body">
-              {% if form.errors %}
-                <div class="alert" role="alert">
-                  Your username and password didn't match. Please try again.
-                </div>
-              {% endif %}
                 <form role="form" method="POST" class="mx-auto m-lg-1">
                   {% csrf_token %}
                   {{ form|crispy}}
