@@ -1,16 +1,19 @@
-version: "3.9"
+version: "2"
 
 services:
   task_manager:
-    image: tm_docker_v1.02:latest
-    container_name: tm_docker_v1.02
+    image: task_manager_v1.04:latest
+    container_name: task_manager_v1.04
     volumes:
       - static_volume:/user_tm/static
       - media_volume:/user_tm/media
     env_file:
       - .env
+    environment:
+      - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
+      - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
     command: >
-      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 tsk_manager.wsgi:application"
+      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
 
   nginx:
     build:
@@ -21,11 +24,29 @@ services:
     volumes:
       - static_volume:/user_tm/static
       - media_volume:/user_tm/media
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
       - task_manager
     ports:
       - "${NGINX_EXTERNAL_PORT}:80"
+      - "${NGINX_EXTERNAL_SSL_PORT}:443"
+
+  acme_companion:
+    image: nginxproxy/acme-companion:2.2
+    container_name: task_manager_acme_companion
+    volumes_from:
+      - nginx
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - acme:/etc/acme.sh
 
 volumes:
   static_volume:
   media_volume:
+  certs:
+  vhost:
+  html:
+  acme:
