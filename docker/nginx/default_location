@@ -1,0 +1,7 @@
+location /static/ {
+    alias /user_tm/static/;
+}
+
+location /media/ {
+    alias /user_tm/media/;
+}
