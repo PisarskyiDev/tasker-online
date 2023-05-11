@@ -46,7 +46,7 @@ class LoginView(generic.FormView):
     template_name = 'accounts/login.html'
 
     def get_success_url(self):
-        return self.request.GET.get('next')
+        return self.request.GET.get('next') or reverse_lazy('catalog:index')
 
     def form_valid(self, form):
         username = form.cleaned_data['username']

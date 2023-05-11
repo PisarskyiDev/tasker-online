@@ -138,7 +138,7 @@ AUTH_USER_MODEL = "catalog.Worker"
 
 LOGIN_URL = '/login/'
 
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
 
 
 # Internationalization
