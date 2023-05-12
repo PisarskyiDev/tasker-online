@@ -133,12 +133,9 @@ class ProfileView(LoginRequiredMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = date.today()
-        actual_task = Task.objects.filter(
-            assignees=self.request.user, is_completed=True
-        ).count()
-        solved_task = Task.objects.filter(
-            assignees=self.request.user, is_completed=False
-        ).count()
+        task = Task.objects.filter(assignees=self.request.user)
+        actual_task = task.filter(is_completed=True).count()
+        solved_task = task.filter(is_completed=False).count()
         context["today"] = today
         context["actual_task"] = actual_task
         context["solved_task"] = solved_task
