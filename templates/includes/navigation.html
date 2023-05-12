@@ -3,24 +3,14 @@
     <div class="col-12">
       <nav class="navbar navbar-expand-lg blur border-radius-xl mt-4 top-0 z-index-3 shadow-primary position-absolute my-3 py-2 start-0 end-0 mx-4">
         <div class="container-fluid px-0">
-          <ul class="navbar-nav navbar-nav-hover ms-auto">
-            <li>
-              <a class="dropdown-item border-radius-md" href="{% url 'catalog:index' %}" rel="tooltip" title="Coded by Soobig666" data-placement="bottom">
-              Home
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'catalog:task_url_list' %}" class="dropdown-item border-radius-md">
-                <span>Tasks</span>
-              </a>
-            </li>
+          <ul class="navbar-nav navbar-nav-hover pt-3 pb-2 py-lg-0 w-100">
+            <li class="nav-item my-auto ms-3 ms-lg-0">
+            <a href="https://github.com/Soobig666/it-company-task-manager/"  type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark mb-0 me-1 mt-2 mt-md-0">Project on GitHub</a>
+        </li>
+
           </ul>
         <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-25" id="navigation">
           <ul class="navbar-nav navbar-nav-hover ms-auto">
-            <li class="nav-item my-auto ms-3 ms-lg-0">
-              <a href="https://github.com/Soobig666/it-company-task-manager/"  type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark mb-0 me-1 mt-2 mt-md-0">Project on GitHub</a>
-              </a>
-            </li>
           </ul>
         </div>
           <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +22,16 @@
           </button>
           <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
             <ul class="navbar-nav navbar-nav-hover ms-auto">
-              <li class="nav-item my-auto ms-3 ms-lg-0">
-              </li>
-
+            <li>
+              <a class="dropdown-item border-radius-md" href="{% url 'catalog:index' %}" rel="tooltip" title="Coded by Soobig666" data-placement="bottom">
+                Home
+              </a>
+          </li>
+            <li>
+            <a href="{% url 'catalog:task_url_list' %}" class="dropdown-item border-radius-md">
+              Tasks
+            </a>
+          </li>
               {% if request.user.is_authenticated %}
                 <div class=" nav-item ms-lg-auto ">
                   <a class="nav-link nav-link-icon me-2"
@@ -58,7 +55,6 @@
                   </a>
                 </div>
               {% endif %}
-
             </ul>
           </div>
         </div>
