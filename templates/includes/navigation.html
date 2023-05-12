@@ -2,25 +2,12 @@
   <div class="row">
     <div class="col-12">
       <nav class="navbar navbar-expand-lg blur border-radius-xl mt-4 top-0 z-index-3 shadow-primary position-absolute my-3 py-2 start-0 end-0 mx-4">
-        <div class="container-fluid px-0">
-          <ul class="navbar-nav navbar-nav-hover ms-auto">
-            <li>
-              <a class="dropdown-item border-radius-md" href="{% url 'catalog:index' %}" rel="tooltip" title="Coded by Soobig666" data-placement="bottom">
-              Home
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'catalog:task_url_list' %}" class="dropdown-item border-radius-md">
-                <span>Tasks</span>
-              </a>
-            </li>
+        <div class="container-fluid px-0" style="justify-content: right; max-">
+          <ul class="navbar-nav navbar-nav-hover pb-2 py-lg-0 w-100">
+
           </ul>
         <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-25" id="navigation">
           <ul class="navbar-nav navbar-nav-hover ms-auto">
-            <li class="nav-item my-auto ms-3 ms-lg-0">
-              <a href="https://github.com/Soobig666/it-company-task-manager/"  type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark mb-0 me-1 mt-2 mt-md-0">Project on GitHub</a>
-              </a>
-            </li>
           </ul>
         </div>
           <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,32 +20,40 @@
           <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
             <ul class="navbar-nav navbar-nav-hover ms-auto">
               <li class="nav-item my-auto ms-3 ms-lg-0">
+            <a href="https://github.com/Soobig666/it-company-task-manager/"  type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark mb-0 me-1 mt-2 mt-md-0">Project on GitHub</a>
               </li>
 
-              {% if request.user.is_authenticated %}
-                <div class=" nav-item ms-lg-auto ">
-                  <a class="nav-link nav-link-icon me-2"
-                    href="{{ user.get_absolute_url }}">
-                    <p class="d-inline text-sm z-index-1 font-weight-bold"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile">{{ user.get_username }}</p>
-                  </a>
-                </div>
-                <ul style="padding: 0">
-                  <div class="shadow-dark rounded-3 nav-item ms-lg-auto" >
+              <li>
+                <a class="dropdown-item border-radius-md" href="{% url 'catalog:index' %}" rel="tooltip" title="Home page" data-placement="bottom">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item border-radius-md" href="{% url 'catalog:task_url_list' %}" rel="tooltip" data-placement="bottom">
+                Tasks
+                </a>
+              </li>
+                {% if request.user.is_authenticated %}
+                  <div class=" nav-item ms-lg-auto ">
                     <a class="nav-link nav-link-icon me-2"
-                      href="{% url 'catalog:logout' %}?next={{ request.path }}">
-                      <i class="fa rounded-3 fa-sign-out me-1"></i>
-                      <p class="d-inline  text-sm z-index-1 font-weight-bold " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
+                      href="{{ user.get_absolute_url }}">
+                      <p class="d-inline text-sm z-index-1 font-weight-bold"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profile">{{ user.get_username }}</p>
                     </a>
                   </div>
-                </ul>
-              {% else %}
-                <div class="rounded-3">
-                  <a href="{% url 'catalog:login' %}?next={{ request.path }}" class="shadow-dark dropdown-item border-radius-md">
-                    <span>Sign In</span>
-                  </a>
-                </div>
-              {% endif %}
-
+                    <div class="shadow-dark rounded-3 nav-item ms-lg-auto" >
+                      <a class="nav-link nav-link-icon me-2"
+                        href="{% url 'catalog:logout' %}?next={{ request.path }}">
+                        <i class="fa rounded-3 fa-sign-out me-1"></i>
+                        <p class="d-inline  text-sm z-index-1 font-weight-bold " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
+                      </a>
+                    </div>
+                {% else %}
+                  <div class="rounded-3">
+                    <a href="{% url 'catalog:login' %}?next={{ request.path }}" class="shadow-dark dropdown-item border-radius-md">
+                      <span>Sign In</span>
+                    </a>
+                  </div>
+                {% endif %}
             </ul>
           </div>
         </div>

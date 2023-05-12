@@ -6,6 +6,8 @@ SHELL ["/bin/bash", "-c"]
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+EXPOSE 8000
+
 RUN pip install --upgrade pip
 
 RUN apt update && apt -qy install gcc libjpeg-dev libxslt-dev \

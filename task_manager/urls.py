@@ -26,7 +26,7 @@ handler403 = views.permission_denied
 handler500 = views.server_error
 
 urlpatterns = [
-    path('', include('catalog.urls', namespace="catalog")),
-    path('admin/', admin.site.urls),
-    path('__debug__/', include('debug_toolbar.urls')),
+    path("", include("catalog.urls", namespace="catalog")),
+    path("admin/", admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

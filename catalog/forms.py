@@ -11,18 +11,18 @@ class LoginForm(auth.AuthenticationForm):
 
 
 class RegistrationForm(auth.UserCreationForm):
-    username = forms.CharField(label='Username', required=True)
-    first_name = forms.CharField(label='First name', required=False)
-    email = forms.EmailField(label='Email', required=True)
+    username = forms.CharField(label="Username", required=True)
+    first_name = forms.CharField(label="First name", required=False)
+    email = forms.EmailField(label="Email", required=True)
 
     class Meta(auth.UserCreationForm.Meta):
         model = Worker
         fields = auth.UserCreationForm.Meta.fields + (
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'position',
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "position",
         )
         widgets = {
             "position": forms.RadioSelect(),
@@ -37,7 +37,7 @@ class RegistrationForm(auth.UserCreationForm):
 
 
 class TaskForm(forms.ModelForm):
-    deadline = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    deadline = forms.DateField(widget=DateInput(attrs={"type": "date"}))
 
     class Meta:
         model = Task
@@ -57,27 +57,26 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['priority'].required = False
+        self.fields["priority"].required = False
 
 
 class ProfileForm(forms.ModelForm):
-
     def __init__(self, request, *args, **kwargs):
         super().__init__(*args, **kwargs)
         current_user = request.user
         # <-- if current_user.is_superuser then he can edit eny profile -->
         if current_user.is_superuser:
-            self.fields['date_joined'].disabled = True
-            self.fields['date_joined'].required = False
-            self.fields['username'].required = True
+            self.fields["date_joined"].disabled = True
+            self.fields["date_joined"].required = False
+            self.fields["username"].required = True
         # <-- if current_user.is_superuser he can edit only own profile-->
         if not current_user.is_superuser and self.instance.pk != current_user.id:
-            self.fields['username'].disabled = True
-            self.fields['first_name'].disabled = True
-            self.fields['last_name'].disabled = True
-            self.fields['email'].disabled = True
-            self.fields['date_joined'].disabled = True
-            self.fields['position'].disabled = True
+            self.fields["username"].disabled = True
+            self.fields["first_name"].disabled = True
+            self.fields["last_name"].disabled = True
+            self.fields["email"].disabled = True
+            self.fields["date_joined"].disabled = True
+            self.fields["position"].disabled = True
 
     class Meta:
         model = Worker
@@ -92,6 +91,3 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             "position": forms.RadioSelect(),
         }
-
-
-
