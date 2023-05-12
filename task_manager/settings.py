@@ -23,10 +23,12 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-j)_8&@v-v=7!@^v=#1i96v0*_%6krz33a#up9enu!c3^+=%fwk')
+SECRET_KEY = os.getenv(
+    'DJANGO_SECRET_KEY',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', False)
+DEBUG = False
 
 INTERNAL_IPS = [
     os.getenv('DJANGO_ALLOWED_HOST'),
@@ -37,8 +39,6 @@ ALLOWED_HOSTS = [
     os.getenv('DJANGO_ALLOWED_HOST'),
     "127.0.0.1",
 ]
-# CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
-
 
 # Application definition
 
@@ -156,14 +156,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
 STATIC_ROOT = "static"
 MEDIA_ROOT = "media"
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#     os.path.join(CORE_DIR, 'static'),
-# )
 
 ASSETS_ROOT = '/static/assets'
 
@@ -172,6 +168,9 @@ ASSETS_ROOT = '/static/assets'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = []
 if csrf_subdomain := os.getenv('CSRF_SUBDOMAIN'):
