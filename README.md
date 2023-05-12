@@ -1,1 +1,0 @@
-# it-company-task-manager

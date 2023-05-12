@@ -43,14 +43,14 @@ def index(request):
 
 class LoginView(generic.FormView):
     form_class = LoginForm
-    template_name = 'accounts/login.html'
+    template_name = "accounts/login.html"
 
     def get_success_url(self):
-        return self.request.GET.get('next') or reverse_lazy('catalog:index')
+        return self.request.GET.get("next") or reverse_lazy("catalog:index")
 
     def form_valid(self, form):
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
         user = authenticate(
             self.request,
             username=username,
@@ -65,22 +65,25 @@ class LoginView(generic.FormView):
 
 class SignUpView(generic.CreateView):
     form_class = RegistrationForm
-    success_url = reverse_lazy('catalog:login')
-    template_name = 'accounts/register.html'
+    success_url = reverse_lazy("catalog:login")
+    template_name = "accounts/register.html"
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
-    template_name = 'catalog/task_list.html'
-    context_object_name = 'tasks_view_list'
+    template_name = "catalog/task_list.html"
+    context_object_name = "tasks_view_list"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = date.today()
-        context['num_task_actual'] = Task.objects.filter(is_completed=True).count()
-        context['today'] = date.today()
+        context["num_task_actual"] = Task.objects.filter(
+            is_completed=True
+        ).count()
+
+        context["today"] = date.today()
         assignees = []
-        for task in context['tasks_view_list']:
+        for task in context["tasks_view_list"]:
             days_left = (task.deadline - today).days
             if days_left == 1:
                 task.days_left = str(days_left) + " " + "day left"
@@ -89,7 +92,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             else:
                 task.days_left = str(days_left) + " " + "days left"
             assignees.extend(list(task.assignees.all()))
-        context['assignees'] = assignees
+        context["assignees"] = assignees
         return context
 
 
@@ -100,41 +103,45 @@ def update_task_status(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.is_completed = not task.is_completed
     task.save()
-    return JsonResponse({'is_completed': task.is_completed})
+    return JsonResponse({"is_completed": task.is_completed})
 
 
 class TaskDetailView(LoginRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
-    template_name = 'catalog/task_detail.html'
-    success_url = reverse_lazy('catalog:task_url_list')
+    template_name = "catalog/task_detail.html"
+    success_url = reverse_lazy("catalog:task_url_list")
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
     template_name = "catalog/task_create.html"
-    success_url = reverse_lazy('catalog:task_url_list')
+    success_url = reverse_lazy("catalog:task_url_list")
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
-    success_url = reverse_lazy('catalog:task_url_list')
+    success_url = reverse_lazy("catalog:task_url_list")
 
 
 class ProfileView(LoginRequiredMixin, generic.UpdateView):
     model = Worker
     form_class = ProfileForm
-    template_name = 'catalog/profile.html'
+    template_name = "catalog/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = date.today()
-        actual_task = Task.objects.filter(assignees=self.request.user, is_completed=True).count()
-        solved_task = Task.objects.filter(assignees=self.request.user, is_completed=False).count()
-        context['today'] = today
-        context['actual_task'] = actual_task
-        context['solved_task'] = solved_task
+        actual_task = Task.objects.filter(
+            assignees=self.request.user, is_completed=True
+        ).count()
+        solved_task = Task.objects.filter(
+            assignees=self.request.user, is_completed=False
+        ).count()
+        context["today"] = today
+        context["actual_task"] = actual_task
+        context["solved_task"] = solved_task
         return context
 
     def get_form(self, form_class=None):
@@ -144,19 +151,21 @@ class ProfileView(LoginRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         current_user = self.request.user
-        if form.instance.pk != current_user.pk and not current_user.is_superuser:
-
-            return HttpResponseForbidden("You are not allowed to edit this profile.")
+        if form.instance.pk != current_user.pk \
+                and not current_user.is_superuser:
+            return HttpResponseForbidden(
+                "You are not allowed to edit this profile."
+            )
         return super().form_valid(form)
 
 
 def page_not_found(request, exception):
-    return render(request, 'http_response/page-404.html', status=404)
+    return render(request, "http_response/page-404.html", status=404)
 
 
 def permission_denied(request, exception):
-    return render(request, 'http_response/page-403.html', status=403)
+    return render(request, "http_response/page-403.html", status=403)
 
 
 def server_error(request):
-    return render(request, 'http_response/page-500.html', status=500)
+    return render(request, "http_response/page-500.html", status=500)
