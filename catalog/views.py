@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.http import require_POST
 
@@ -96,14 +97,13 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-@require_POST
-def update_task_status(request, pk):
-    # кнопка done/open на представлении экземпляра в шаблоне task_list.html
-
-    task = get_object_or_404(Task, pk=pk)
-    task.is_completed = not task.is_completed
-    task.save()
-    return JsonResponse({"is_completed": task.is_completed})
+@method_decorator(require_POST, name='dispatch')
+class TaskStatusUpdateView(generic.View):
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        task.is_completed = not task.is_completed
+        task.save()
+        return JsonResponse({"is_completed": task.is_completed})
 
 
 class TaskDetailView(LoginRequiredMixin, generic.UpdateView):
