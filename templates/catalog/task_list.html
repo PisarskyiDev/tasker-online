@@ -69,24 +69,18 @@
                   <a href="{% url 'catalog:task_url_detail' task.pk %}" type="button" class="btn btn-sm btn-secondary">Edit</a>
                   <a href="{% url 'catalog:task_url_delete' task.pk %}" type="button" class="btn btn-sm bg-gradient-primary">Delete</a>
                 </div>
-                  {% if task.priority == '!!!' %}
-                    <small class="text-body-secondary">
-                      <h4 class="text-danger">{{ task.priority }}</h4>
-                    </small>
-                  {% elif task.priority == '!!' %}
-                    <small class="text-body-secondary">
-                      <h4 class="text-warning">{{ task.priority }}</h4>
-                    </small>
-                  {% elif task.priority == '!' %}
-                    <small class="text-body-secondary">
-                      <h4 class="text-success">{{ task.priority }}</h4>
-                    </small>
-                  {% endif %}
-                  {% if task.is_completed %}
-                  <small class="text-body-secondary">{{ task.days_left }}</small>
-                  {% else %}
-                  <small class="text-body-secondary">task closed</small>
-                  {% endif %}
+                  <small class="text-body-secondary">
+                    <h4>{{ task.priority }}</h4>
+                  </small>
+
+                  <small class="text-body-secondary">
+                    {% if task.is_completed %}
+                      {{ task.days_left }}
+                    {% else %}
+                      task closed
+                    {% endif %}
+                  </small>
+
               </div>
             </div>
           </div>
