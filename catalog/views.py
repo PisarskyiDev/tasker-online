@@ -83,17 +83,21 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         ).count()
 
         context["today"] = date.today()
-        assignees = []
+        # assignees = []
+        deadline = None
+
         for task in context["tasks_view_list"]:
-            days_left = (task.deadline - today).days
-            if days_left == 1:
-                task.days_left = str(days_left) + " " + "day left"
-            if days_left == 0:
-                task.days_left = "Today is deadline"
-            else:
-                task.days_left = str(days_left) + " " + "days left"
-            assignees.extend(list(task.assignees.all()))
-        context["assignees"] = assignees
+            prefix = "days"
+            deadline_date = (task.deadline - today).days
+            if deadline_date == 1:
+                prefix = "day"
+            deadline = f"{deadline_date} {prefix} left"
+            if not deadline_date:
+                deadline = "Today is deadline"
+            task.days_left = deadline
+            # assignees.extend(list(task.assignees.all()))
+
+        # context["assignees"] = assignees
         return context
 
 

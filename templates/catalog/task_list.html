@@ -50,10 +50,10 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for assignee in assignees %}
+                    {% for assign in task.assignees.all %}
                     <tr>
-                      <td text-anchor="middle" ><a href="{% url 'catalog:profile_url_detail' assignee.pk %}">{{ assignee.username }}</a></td>
-                      <td>{{ assignee.position }}</td>
+                      <td text-anchor="middle" ><a href="{% url 'catalog:profile_url_detail' assign.pk %}">{{ assign.username }}</a></td>
+                      <td>{{ assign.position }}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -69,17 +69,24 @@
                   <a href="{% url 'catalog:task_url_detail' task.pk %}" type="button" class="btn btn-sm btn-secondary">Edit</a>
                   <a href="{% url 'catalog:task_url_delete' task.pk %}" type="button" class="btn btn-sm bg-gradient-primary">Delete</a>
                 </div>
-                  <small class="text-body-secondary">
-                    <h4>{{ task.priority }}</h4>
-                  </small>
-
-                  <small class="text-body-secondary">
-                    {% if task.is_completed %}
-                      {{ task.days_left }}
-                    {% else %}
-                      task closed
-                    {% endif %}
-                  </small>
+                  {% if task.priority == '!!!' %}
+                    <small class="text-body-secondary">
+                      <h4 class="text-danger">{{ task.priority }}</h4>
+                    </small>
+                  {% elif task.priority == '!!' %}
+                    <small class="text-body-secondary">
+                      <h4 class="text-warning">{{ task.priority }}</h4>
+                    </small>
+                  {% elif task.priority == '!' %}
+                    <small class="text-body-secondary">
+                      <h4 class="text-success">{{ task.priority }}</h4>
+                    </small>
+                  {% endif %}
+                  {% if task.is_completed %}
+                  <small class="text-body-secondary">{{ task.days_left }}</small>
+                  {% else %}
+                  <small class="text-body-secondary">task closed</small>
+                  {% endif %}
 
               </div>
             </div>
