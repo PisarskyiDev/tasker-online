@@ -19,6 +19,8 @@ git clone https://github.com/Soobig666/it-company-task-manager.git
 
 cd it-company-task-manager
 
+sudo apt install python3-venv
+
 python3 -m venv venv
 
 source venv/bin/activate
@@ -26,6 +28,8 @@ source venv/bin/activate
 pip install --upgrade pip
 
 pip install -r requirements.txt
+
+python manage.py migrate
 
 python manage.py runserver   # starts Django server
 ```
