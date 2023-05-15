@@ -83,7 +83,6 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         ).count()
 
         context["today"] = date.today()
-        # assignees = []
         deadline = None
 
         for task in context["tasks_view_list"]:
@@ -95,9 +94,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             if not deadline_date:
                 deadline = "Today is deadline"
             task.days_left = deadline
-            # assignees.extend(list(task.assignees.all()))
 
-        # context["assignees"] = assignees
         return context
 
 

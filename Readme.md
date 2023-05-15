@@ -8,7 +8,10 @@
 ## Check it out!
 
 
-Live version: [It company task manager](https://parra-bellum.space)
+Live version: [It company task manager](https://parra-bellum.space)\
+
+login: user\
+password: user12345
 
 ## Developing
 
