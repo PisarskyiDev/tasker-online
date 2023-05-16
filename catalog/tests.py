@@ -79,7 +79,9 @@ class WorkerModelTestCase(TestCase):
     def test_worker_get_absolute_url(self, mock_reverse):
         mock_reverse.return_value = "/catalog/profile/1/"
         url = self.worker.get_absolute_url()
-        mock_reverse.assert_called_once_with("catalog:profile_url_detail", args=["1"])
+        mock_reverse.assert_called_once_with(
+            "catalog:profile_url_detail", args=["1"]
+        )
         self.assertEqual(url, "/catalog/profile/1/")
 
 
@@ -150,7 +152,6 @@ class SignUpViewTestCase(TestCase):
         response = self.client.get(reverse("catalog:registrate"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "accounts/register.html")
-
 
     def test_signup_view_post_invalid_data(self):
         url = reverse("catalog:registrate")

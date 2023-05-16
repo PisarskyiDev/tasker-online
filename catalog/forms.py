@@ -70,7 +70,8 @@ class ProfileForm(forms.ModelForm):
             self.fields["date_joined"].required = False
             self.fields["username"].required = True
         # <-- if current_user.is_superuser he can edit only own profile-->
-        if not current_user.is_superuser and self.instance.pk != current_user.id:
+        if not current_user.is_superuser \
+                and self.instance.pk != current_user.id:
             self.fields["username"].disabled = True
             self.fields["first_name"].disabled = True
             self.fields["last_name"].disabled = True
