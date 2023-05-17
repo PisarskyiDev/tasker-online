@@ -2,5 +2,5 @@
 venv
 **.sqlite3
 __pycache__/
-#.env
+.env
 *.sh
