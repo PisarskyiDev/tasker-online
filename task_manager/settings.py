@@ -26,7 +26,6 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
-    "123django_secret_key_default_when_main_is_empty_on_env123"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
