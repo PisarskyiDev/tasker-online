@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import forms as auth
 from django import forms
 from django.forms import DateInput
@@ -59,6 +61,12 @@ class TaskForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["priority"].required = False
 
+    def clean_deadline(self):
+        deadline = self.cleaned_data.get("deadline")
+        if deadline and deadline < date.today():
+            raise forms.ValidationError("The date cannot be in the past.")
+        return deadline
+
 
 class ProfileForm(forms.ModelForm):
     def __init__(self, request, *args, **kwargs):
@@ -70,7 +78,8 @@ class ProfileForm(forms.ModelForm):
             self.fields["date_joined"].required = False
             self.fields["username"].required = True
         # <-- if current_user.is_superuser he can edit only own profile-->
-        if not current_user.is_superuser and self.instance.pk != current_user.id:
+        if not current_user.is_superuser \
+                and self.instance.pk != current_user.id:
             self.fields["username"].disabled = True
             self.fields["first_name"].disabled = True
             self.fields["last_name"].disabled = True

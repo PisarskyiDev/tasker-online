@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} all Tasks {% endblock %}
+{% block title %} Tasks {% endblock %}
 
 {% block body_class %} index-page {% endblock %}
 
@@ -50,10 +50,10 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for assignee in assignees %}
+                    {% for assign in task.assignees.all %}
                     <tr>
-                      <td text-anchor="middle" ><a href="{% url 'catalog:profile_url_detail' assignee.pk %}">{{ assignee.username }}</a></td>
-                      <td>{{ assignee.position }}</td>
+                      <td text-anchor="middle" ><a href="{% url 'catalog:profile_url_detail' assign.pk %}">{{ assign.username }}</a></td>
+                      <td>{{ assign.position }}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -87,6 +87,7 @@
                   {% else %}
                   <small class="text-body-secondary">task closed</small>
                   {% endif %}
+
               </div>
             </div>
           </div>

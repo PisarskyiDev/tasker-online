@@ -7,7 +7,7 @@ from catalog.views import (
     SignUpView,
     TaskListView,
     TaskDetailView,
-    update_task_status,
+    TaskStatusUpdateView,
     TaskCreateView,
     TaskDeleteView,
     ProfileView,
@@ -34,7 +34,7 @@ urlpatterns = [
     ),
     path(
         "task/<int:pk>/update_status/",
-        update_task_status,
+        TaskStatusUpdateView.as_view(),
         name="update_task_status"
     ),
     path(

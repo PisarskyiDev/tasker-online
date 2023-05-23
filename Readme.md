@@ -8,7 +8,10 @@
 ## Check it out!
 
 
-Live version: [It company task manager](https://parra-bellum.space)
+Live version: [It company task manager](https://parra-bellum.space)\
+
+login: user\
+password: user12345
 
 ## Developing
 
@@ -19,15 +22,13 @@ git clone https://github.com/Soobig666/it-company-task-manager.git
 
 cd it-company-task-manager
 
-python3 -m venv venv
+sudo apt install python3-venv
 
-source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
 
-pip install --upgrade pip
+pip install --upgrade pip && pip install -r requirements.txt
 
-pip install -r requirements.txt
-
-python manage.py runserver   # starts Django server
+python manage.py migrate && python manage.py runserver 
 ```
 
 ### Deploying / Publishing

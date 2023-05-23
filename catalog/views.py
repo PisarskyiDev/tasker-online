@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.http import require_POST
 
@@ -82,28 +83,28 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         ).count()
 
         context["today"] = date.today()
-        assignees = []
+        deadline = None
+
         for task in context["tasks_view_list"]:
-            days_left = (task.deadline - today).days
-            if days_left == 1:
-                task.days_left = str(days_left) + " " + "day left"
-            if days_left == 0:
-                task.days_left = "Today is deadline"
-            else:
-                task.days_left = str(days_left) + " " + "days left"
-            assignees.extend(list(task.assignees.all()))
-        context["assignees"] = assignees
+            prefix = "days"
+            deadline_date = (task.deadline - today).days
+            if deadline_date == 1:
+                prefix = "day"
+            deadline = f"{deadline_date} {prefix} left"
+            if not deadline_date:
+                deadline = "Today is deadline"
+            task.days_left = deadline
+
         return context
 
 
-@require_POST
-def update_task_status(request, pk):
-    # кнопка done/open на представлении экземпляра в шаблоне task_list.html
-
-    task = get_object_or_404(Task, pk=pk)
-    task.is_completed = not task.is_completed
-    task.save()
-    return JsonResponse({"is_completed": task.is_completed})
+@method_decorator(require_POST, name='dispatch')
+class TaskStatusUpdateView(generic.View):
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        task.is_completed = not task.is_completed
+        task.save()
+        return JsonResponse({"is_completed": task.is_completed})
 
 
 class TaskDetailView(LoginRequiredMixin, generic.UpdateView):
@@ -133,12 +134,9 @@ class ProfileView(LoginRequiredMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = date.today()
-        actual_task = Task.objects.filter(
-            assignees=self.request.user, is_completed=True
-        ).count()
-        solved_task = Task.objects.filter(
-            assignees=self.request.user, is_completed=False
-        ).count()
+        task = Task.objects.filter(assignees=self.request.user)
+        actual_task = task.filter(is_completed=True).count()
+        solved_task = task.filter(is_completed=False).count()
         context["today"] = today
         context["actual_task"] = actual_task
         context["solved_task"] = solved_task

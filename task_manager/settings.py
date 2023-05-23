@@ -26,10 +26,11 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
+    "can't be empty because test not passed"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 INTERNAL_IPS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
@@ -96,24 +97,13 @@ WSGI_APPLICATION = "task_manager.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if os.environ.get("DB_ENGINE") and os.environ.get("DB_ENGINE") == "postgresql":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "appseed_db"),
-            "USER": os.getenv("POSTGRES_USERNAME", "appseed_db_usr"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "pass"),
-            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", 3306),
-        },
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db.sqlite3",
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "db.sqlite3",
-        }
-    }
+}
 
 
 # Password validation
@@ -156,12 +146,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = "static"
-MEDIA_ROOT = "media"
-STATIC_URL = "/static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
-ASSETS_ROOT = "/static/assets"
+MEDIA_ROOT = BASE_DIR / 'media'
+
+ASSETS_ROOT = STATIC_URL + 'assets'
 
 
 # Default primary key field type
