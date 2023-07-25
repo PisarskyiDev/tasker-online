@@ -18,7 +18,7 @@ password: user12345
 First step is a download from git this project, to download paste this commands:
 
 ```shell
-git clone https://github.com/Soobig666/it-company-task-manager.git
+git clone https://github.com/Pisarskij/task-assistant-online.git
 
 cd it-company-task-manager
 
