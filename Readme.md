@@ -8,7 +8,7 @@
 ## Check it out!
 
 
-Live version: [It company task manager](https://parra-bellum.space)\
+Live version: [task manager](https://parra-bellum.space)
 
 login: user\
 password: user12345
@@ -56,10 +56,3 @@ What's all the bells and whistles this project can perform?
 * Create tasks, delete, update tasks
 * Set deadlines and follow up on them
 * Assign different performers to perform tasks that are typical for their skill
-
-
-
-## Links
-
-- Repository: https://github.com/Soobig666/it-company-task-manager/
-- Project homepage: https://github.com/Soobig666/it-company-task-manager/blob/main/templates/catalog/index.html
