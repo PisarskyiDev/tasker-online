@@ -1,14 +1,17 @@
 ![Logo of the project](static/assets/img/logo-6-1.png)
 
 # Name of the project
-> Online Task Assistant
+> Tasker Online
+# Description
+> Tasker Online is a simple yet powerful task management tool that helps teams stay organized and on track. With TaskAssistant, you    can easily assign tasks, track progress, set deadlines, and open, close, and reopen tasks. 
+
 
 
 
 ## Check it out!
 
 
-Live version: [Task Assistant](https://parra-bellum.space)
+Live version: [Tasker Online](https://parra-bellum.space)
 
 login: user\
 password: user12345
@@ -18,9 +21,9 @@ password: user12345
 First step is a download from git this project, to download paste this commands:
 
 ```shell
-git clone https://github.com/Pisarskij/task-assistant-online.git
+git clone https://github.com/Pisarskij/tasker-online.git
 
-cd it-company-task-manager
+cd tasker-online
 
 sudo apt install python3-venv
 
