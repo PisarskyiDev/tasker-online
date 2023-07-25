@@ -1,14 +1,14 @@
 ![Logo of the project](static/assets/img/logo-6-1.png)
 
 # Name of the project
-> It Company Task Manager
+> Online Task Assistant
 
 
 
 ## Check it out!
 
 
-Live version: [task manager](https://parra-bellum.space)
+Live version: [Task Assistant](https://parra-bellum.space)
 
 login: user\
 password: user12345
