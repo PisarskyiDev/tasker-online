@@ -139,10 +139,8 @@ AUTHENTICATION_BACKENDS = (
     # ...
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = (
-    "92920035923-ippqd1p380j15d90nt4lguar99thpdbp.apps.googleusercontent.com"
-)
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 
 # Internationalization
@@ -183,6 +181,3 @@ SESSION_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = []
 if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):
     CSRF_TRUSTED_ORIGINS += [f"http://{csrf_subdomain}", f"https://{csrf_subdomain}"]
-
-
-SOCIAL_AUTH_PIPELINE = ("catalog.forms.collect_password",)
