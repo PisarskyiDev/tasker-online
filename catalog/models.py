@@ -24,11 +24,7 @@ class Position(models.Model):
 
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(
-        to=Position,
-        on_delete=models.DO_NOTHING,
-        null=True
-    )
+    position = models.ForeignKey(to=Position, on_delete=models.DO_NOTHING, null=True)
     username = models.CharField(max_length=100, unique=True, blank=True)
 
     def __str__(self):

@@ -78,9 +78,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = date.today()
-        context["num_task_actual"] = Task.objects.filter(
-            is_completed=True
-        ).count()
+        context["num_task_actual"] = Task.objects.filter(is_completed=True).count()
 
         context["today"] = date.today()
         deadline = None
@@ -98,7 +96,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-@method_decorator(require_POST, name='dispatch')
+@method_decorator(require_POST, name="dispatch")
 class TaskStatusUpdateView(generic.View):
     def post(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
@@ -149,11 +147,8 @@ class ProfileView(LoginRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         current_user = self.request.user
-        if form.instance.pk != current_user.pk \
-                and not current_user.is_superuser:
-            return HttpResponseForbidden(
-                "You are not allowed to edit this profile."
-            )
+        if form.instance.pk != current_user.pk and not current_user.is_superuser:
+            return HttpResponseForbidden("You are not allowed to edit this profile.")
         return super().form_valid(form)
 
 
