@@ -20,7 +20,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 from catalog import views
-from catalog.forms import collect_password
 
 handler404 = views.page_not_found
 handler403 = views.permission_denied
@@ -30,6 +29,5 @@ urlpatterns = [
     path("", include("catalog.urls", namespace="catalog")),
     path("admin/", admin.site.urls),
     path("social-auth/", include("social_django.urls", namespace="social")),
-    path("collect-password/", collect_password, name="collect_password"),
     path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
