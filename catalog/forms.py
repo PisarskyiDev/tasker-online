@@ -3,8 +3,6 @@ from datetime import date
 from django.contrib.auth import forms as auth
 from django import forms
 from django.forms import DateInput
-from django.shortcuts import redirect, render
-from django.urls import reverse
 
 from .models import Worker, Task
 
@@ -101,22 +99,3 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             "position": forms.RadioSelect(),
         }
-
-
-class PasswordForm(forms.Form):
-    secret_word = forms.CharField(max_length=10)
-
-
-def collect_password(strategy, backend, request, details, *args, **kwargs):
-    if request.method == "POST":
-        form = PasswordForm(request.POST)
-        if form.is_valid():
-            # Сохраняем введенный пароль в сессии для передачи в пайплайн
-            request.session["local_password"] = form.cleaned_data["secret_word"]
-
-            # Перенаправляем на завершение пайплайна
-            return redirect(reverse("social:complete", args=("google-oauth2",)))
-    else:
-        form = PasswordForm()
-
-    return render(request, "password_form.html", {"form": form})
