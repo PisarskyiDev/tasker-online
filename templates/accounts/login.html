@@ -68,8 +68,9 @@
               <a href="{% url 'catalog:registrate' %}" class="text-dark text-gradient font-weight-bold">Sign UP</a>
               <div style="display: flex; justify-content: center; align-items: center;">
                 <div class="mt-2 btn btn-sm btn-round">
-                  <a href="{% url 'social:begin' 'google-oauth2' %}">
-                    <img class="w-70" src="{% static 'assets/img/google.svg' %}" alt="Google Logo">
+                  <a class="w-40" href="{% url 'social:begin' 'google-oauth2' %}">
+                    Login with
+                    <img class="w-25" src="{% static 'assets/img/google.svg' %}" alt="Google Logo">
                   </a>
                 </div>
             </div>
