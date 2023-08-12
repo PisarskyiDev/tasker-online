@@ -38,7 +38,7 @@ class TaskModelTestCase(TestCase):
             deadline="2023-01-01",
             is_completed=True,
             priority="!",
-            task_type=self.task_type
+            task_type=self.task_type,
         )
         self.task.assignees.set([self.worker])
 
@@ -60,10 +60,7 @@ class TaskModelTestCase(TestCase):
 class WorkerModelTestCase(TestCase):
     def setUp(self):
         self.position = Position.objects.create(name="Test Position")
-        self.worker = Worker.objects.create(
-            username="testuser",
-            position=self.position
-        )
+        self.worker = Worker.objects.create(username="testuser", position=self.position)
 
     def test_worker_str_representation(self):
         self.assertEqual(str(self.worker), "testuser")
@@ -79,46 +76,44 @@ class WorkerModelTestCase(TestCase):
     def test_worker_get_absolute_url(self, mock_reverse):
         mock_reverse.return_value = "/catalog/profile/1/"
         url = self.worker.get_absolute_url()
-        mock_reverse.assert_called_once_with(
-            "catalog:profile_url_detail", args=["1"]
-        )
+        mock_reverse.assert_called_once_with("catalog:profile_url_detail", args=["1"])
         self.assertEqual(url, "/catalog/profile/1/")
 
 
 class URLTestCase(TestCase):
     def test_index_url(self):
-        url = reverse('catalog:index')
-        self.assertEqual(url, '/')
+        url = reverse("catalog:index")
+        self.assertEqual(url, "/")
 
     def test_signup_url(self):
-        url = reverse('catalog:registrate')
-        self.assertEqual(url, '/registrate/')
+        url = reverse("catalog:registrate")
+        self.assertEqual(url, "/registrate/")
 
     def test_login_url(self):
-        url = reverse('catalog:login')
-        self.assertEqual(url, '/login/')
+        url = reverse("catalog:login")
+        self.assertEqual(url, "/login/")
 
     def test_logout_url(self):
-        url = reverse('catalog:logout')
-        self.assertEqual(url, '/logout/')
+        url = reverse("catalog:logout")
+        self.assertEqual(url, "/logout/")
 
     def test_task_list_url(self):
-        url = reverse('catalog:task_url_list')
-        self.assertEqual(url, '/task/')
+        url = reverse("catalog:task_url_list")
+        self.assertEqual(url, "/task/")
 
     def test_task_create_url(self):
-        url = reverse('catalog:task_url_create')
-        self.assertEqual(url, '/task/create/')
+        url = reverse("catalog:task_url_create")
+        self.assertEqual(url, "/task/create/")
 
     def test_task_status_update_url(self):
         task_id = 1  # Provide an existing task ID here
-        url = reverse('catalog:update_task_status', args=[task_id])
-        self.assertEqual(url, f'/task/{task_id}/update_status/')
+        url = reverse("catalog:update_task_status", args=[task_id])
+        self.assertEqual(url, f"/task/{task_id}/update_status/")
 
     def test_task_detail_url(self):
         task_id = 1  # Provide an existing task ID here
-        url = reverse('catalog:task_url_detail', args=[task_id])
-        self.assertEqual(url, f'/task/{task_id}/')
+        url = reverse("catalog:task_url_detail", args=[task_id])
+        self.assertEqual(url, f"/task/{task_id}/")
 
 
 class LoginViewTestCase(TestCase):

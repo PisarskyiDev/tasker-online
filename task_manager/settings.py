@@ -24,10 +24,7 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    "can't be empty because test not passed"
-)
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "can't be empty because test not passed")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -35,11 +32,13 @@ DEBUG = True
 INTERNAL_IPS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
     "127.0.0.1",
+    "localhost",
 ]
 
 ALLOWED_HOSTS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
     "127.0.0.1",
+    "localhost",
 ]
 
 # Application definition
@@ -55,6 +54,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "catalog",
+    "social_django",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -86,6 +86,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "catalog.context_processors.cfg_assets_root",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -126,9 +128,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "catalog.Worker"
 
-LOGIN_URL = "/login/"
+LOGIN_URL = "/"
 
 LOGIN_REDIRECT_URL = "/"
+
+AUTHENTICATION_BACKENDS = (
+    # ...
+    "social_core.backends.google.GoogleOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
+    # ...
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 
 # Internationalization
@@ -146,16 +158,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
 
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / "media"
 
-ASSETS_ROOT = STATIC_URL + 'assets'
+ASSETS_ROOT = STATIC_URL + "assets"
 
 
 # Default primary key field type
