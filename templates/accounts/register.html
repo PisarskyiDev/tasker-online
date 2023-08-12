@@ -1,4 +1,5 @@
 {% extends "layouts/base-fullscreen.html" %}
+{% load static %}
 {% load crispy_forms_filters %}
 
 {% load crispy_forms_tags %}
@@ -61,8 +62,17 @@
                 Already have an account?
                 <a href="{% url 'catalog:login' %}" class="text-dark text-gradient font-weight-bold">Sign IN</a>
               </p>
+
             </form>
 
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div class="mt-2 btn btn-sm btn-round">
+                  <a class="w-40" href="{% url 'social:begin' 'google-oauth2' %}">
+                    Login with
+                    <img class="w-25" src="{% static 'assets/img/google.svg' %}" alt="Google Logo">
+                  </a>
+                </div>
+            </div>
           {% else %}
 
             <p class="mt-4 text-sm text-center">
