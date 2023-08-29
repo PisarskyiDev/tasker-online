@@ -16,11 +16,11 @@ from .forms import (
     ProfileForm,
 )
 from .models import (
-    Worker,
     Task,
     TaskType,
     Position,
 )
+from user.models import Worker
 
 
 def index(request):

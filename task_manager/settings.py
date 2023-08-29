@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "catalog",
     "social_django",
+    "user",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -133,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "catalog.Worker"
+AUTH_USER_MODEL = "user.Worker"
 
 LOGIN_URL = "/"
 

@@ -4,7 +4,8 @@ from django.contrib.auth import forms as auth
 from django import forms
 from django.forms import DateInput
 
-from .models import Worker, Task
+from .models import Task
+from user.models import Worker
 
 
 class LoginForm(auth.AuthenticationForm):
@@ -74,8 +75,6 @@ class ProfileForm(forms.ModelForm):
         current_user = request.user
         # <-- if current_user.is_superuser then he can edit eny profile -->
         if current_user.is_superuser:
-            self.fields["date_joined"].disabled = True
-            self.fields["date_joined"].required = False
             self.fields["username"].required = True
         # <-- if current_user.is_superuser he can edit only own profile-->
         if not current_user.is_superuser and self.instance.pk != current_user.id:
@@ -93,7 +92,6 @@ class ProfileForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            "date_joined",
             "position",
         ]
         widgets = {

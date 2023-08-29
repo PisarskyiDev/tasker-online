@@ -2,16 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 
 from .models import (
-    Worker,
     Task,
     Position,
     TaskType,
 )
-
-
-@admin.register(Worker)
-class WorkerAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(Task)
