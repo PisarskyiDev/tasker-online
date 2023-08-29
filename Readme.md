@@ -1,4 +1,4 @@
-![Logo of the project](static/assets/img/logo-6-1.png)
+![Logo of the project](staticfiles/assets/img/logo-6-1.png)
 
 # Name of the project
 > Tasker Online
