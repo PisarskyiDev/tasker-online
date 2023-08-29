@@ -19,12 +19,12 @@
 // {{ site.product.name }} components
 
 // Variables
-@import "variables/navbar-vertical";
-@import "variables/social-buttons";
-@import "variables/breadcrumb";
+@import "navbar-vertical";
+@import "social-buttons";
+@import "breadcrumb";
 
 // Mixin
-@import "mixins/mixins";
+@import "mixins";
 
 // Core Components - extra styling
 @import "alert";
@@ -38,7 +38,7 @@
 @import "dropup";
 @import "header";
 @import "fixed-plugin";
-@import "forms/forms";
+@import "forms";
 @import "footer";
 @import "gradients";
 @import "icons";
@@ -60,4 +60,4 @@
 @import "typography";
 
 // Plugins
-@import "plugins/free/plugins";
+@import "plugins";

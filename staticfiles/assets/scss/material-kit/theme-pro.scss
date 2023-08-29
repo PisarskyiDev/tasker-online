@@ -20,7 +20,7 @@
 @import "theme";
 
 // Mixin
-@import "mixins/mixins";
+@import "mixins";
 
 // PRO Components
 @import "accordion";
@@ -34,4 +34,4 @@
 @import "rtl-extend";
 
 // Plugins
-@import "plugins/pro/plugins-extend";
+@import "plugins-extend";

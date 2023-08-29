@@ -12,19 +12,19 @@
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 // Bootstrap Functions
-@import "material-kit/bootstrap/functions";
+@import "functions";
 
 // Custom Variables
-@import "material-kit/custom/variables";
+@import "variables";
 
 // Theme Variables
-@import "material-kit/variables";
+@import "variables";
 
 // Bootstrap Core
-@import "material-kit/bootstrap/bootstrap";
+@import "bootstrap";
 
 // Theme Core
-@import "material-kit/theme";
+@import "theme";
 
 // Custom Variables
-@import "material-kit/custom/styles";
+@import "styles";
