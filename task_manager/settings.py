@@ -155,17 +155,23 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.auth_allowed",
     "social_core.pipeline.social_auth.social_user",
     "social_core.pipeline.social_auth.associate_by_email",
+    "user.custom_pipeline.create_user",
     "social_core.pipeline.user.get_username",
-    "social_core.pipeline.user.create_user",
     "social_core.pipeline.social_auth.associate_user",
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
+    "social_core.pipeline.mail.mail_validation",
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-# SOCIAL_AUTH_PASSWORDLESS = False
-SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = False
+SOCIAL_AUTH_PASSWORDLESS = False
+EMAIL_VALIDATION_URL = "/"
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = (
+    "task_manager.send_email.send_email_verification"
+)
+SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = True  # TODO: custom mail validation
+SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = True
 SOCIAL_AUTH_USER_MODEL = "user.Worker"
 SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ["username", "first_name", "last_name"]
 
@@ -219,7 +225,7 @@ LOGGING = {
         "file": {
             "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": "task_manager.log",  # Укажите путь к лог-файлу
+            "filename": "task_manager.log",
         },
     },
     "root": {
