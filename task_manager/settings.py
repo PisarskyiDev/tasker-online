@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "social_django",
     "user",
     "auth_verification",
+    "tokens",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
