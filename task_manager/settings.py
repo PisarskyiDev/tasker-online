@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "catalog",
     "social_django",
     "user",
+    "auth",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -170,9 +171,7 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 EMAIL_VALIDATION_URL = "/"
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = (
-    "task_manager.send_email.send_email_verification"
-)
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = "auth.send_email.send_email_verification"
 SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = True
 SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = False  # TODO CHEck how this work
 SOCIAL_AUTH_USER_MODEL = "user.Worker"
