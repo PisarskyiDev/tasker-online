@@ -1,16 +1,25 @@
 from datetime import date
-
 from social_core.exceptions import AuthMissingParameter
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import transaction, OperationalError
-from django.http import JsonResponse, HttpResponseForbidden
+from django.db import transaction
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.http import require_POST
 from social_django.models import Code
+
+from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+
+import task_manager.settings
+from tokens.account_activation_token import token_manager
+from django.core.mail import send_mail
+from django.utils.encoding import force_bytes, force_str
+from django.template.loader import render_to_string
 
 from .forms import (
     LoginForm,
@@ -67,10 +76,52 @@ class LoginView(generic.FormView):
             return self.form_invalid(form)
 
 
-class SignUpView(generic.CreateView):
-    form_class = RegistrationForm
-    success_url = reverse_lazy("catalog:login")
-    template_name = "accounts/register.html"
+def signup(request):
+    user_model = get_user_model()
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        form_valid = True if form.is_valid() else False
+        if form_valid:
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = "Activate your account."
+            message = render_to_string(
+                "email_template.html",
+                {
+                    "user": user,
+                    "domain": current_site.domain,
+                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "token": token_manager.make_token(user),
+                },
+            )
+            to_email = form.cleaned_data.get("email")
+            sender = task_manager.settings.EMAIL_HOST_USER
+            send_mail(mail_subject, message, sender, [to_email])
+            return HttpResponse(
+                "Please confirm your email address to complete the registration"
+            )
+    else:
+        form = RegistrationForm()
+    return render(request, "accounts/register.html", {"form": form})
+
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and token_manager.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return HttpResponse(
+            "Thank you for your email confirmation. Now you can login your account."
+        )
+    else:
+        return HttpResponse("Activation link is invalid!")
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
