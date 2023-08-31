@@ -26,7 +26,9 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "can't be empty because test not passed")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+RAISE_EXCEPTIONS = True
+DEBUG = True
 
 INTERNAL_IPS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
@@ -154,26 +156,28 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_uid",
     "social_core.pipeline.social_auth.auth_allowed",
     "social_core.pipeline.social_auth.social_user",
-    "social_core.pipeline.social_auth.associate_by_email",
-    "user.custom_pipeline.create_user",
+    "user.custom_pipeline.check_user_validation",
     "social_core.pipeline.user.get_username",
+    "user.custom_pipeline.create_user",
     "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.auth_allowed",
     "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.social_auth.associate_by_email",
     "social_core.pipeline.user.user_details",
-    "social_core.pipeline.mail.mail_validation",
+    "user.custom_pipeline.mail_validation",
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-SOCIAL_AUTH_PASSWORDLESS = False
 EMAIL_VALIDATION_URL = "/"
 SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = (
     "task_manager.send_email.send_email_verification"
 )
-SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = True  # TODO: custom mail validation
-SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = True
+SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = True
+SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = False  # TODO CHEck how this work
 SOCIAL_AUTH_USER_MODEL = "user.Worker"
 SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ["username", "first_name", "last_name"]
+SOCIAL_AUTH_SESSION_EXPIRATION = True
 
 # –––––– End social_django settings
 
@@ -182,7 +186,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
+EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 # ----- End gmail settings
