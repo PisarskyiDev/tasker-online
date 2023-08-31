@@ -66,12 +66,12 @@
               Don't have an account?
               <a href="{% url 'catalog:registrate' %}" class="text-dark text-gradient font-weight-bold">Sign UP</a>
               <div style="display: flex; justify-content: center; align-items: center;">
-                <div class="mt-2 btn btn-sm btn-round">
-                  <a class="w-40" href="{% url 'social:begin' 'google-oauth2' %}">
+                <a class="w-40" href="{% url 'social:begin' 'google-oauth2' %}">
+                  <div class="mt-2 btn btn-sm btn-round button bg-gradient-dark">
                     Login with
                     <img class="w-25" src="{{ ASSETS_ROOT }}/img/google.svg" alt="Google Logo">
-                  </a>
-                </div>
+                  </div>
+                </a>
             </div>
           </div>
         </div>

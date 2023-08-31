@@ -55,15 +55,17 @@ def mail_validation(backend, details, is_new=False, *args, **kwargs):
 
 
 def check_user_validation(backend, details, *args, **kwargs):
+    already_send = None
     current_user = Worker.objects.filter(email=details["email"])
     try:
-        already_send = current_user.waiting_verified
-    except AttributeError:
+        already_send = current_user.get().waiting_verified
+    except (AttributeError, Worker.DoesNotExist) as e:
+        print(e)
         already_send = False
 
     if current_user and already_send or not current_user:
         pass
-    else:
-        return backend.strategy.redirect(
-            backend.strategy.setting("EMAIL_VALIDATION_URL")
-        )
+    # else:
+    #     return backend.strategy.redirect(
+    #         backend.strategy.setting("EMAIL_VALIDATION_URL")
+    #     )

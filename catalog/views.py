@@ -168,12 +168,12 @@ def server_error(request):
         if "google-oauth2" in request.backend.name:
             with transaction.atomic():
                 old_code = request.GET.get("verification_code")
-                user = Code.objects.get(code=old_code)
+                user = Code.objects.get(code=old_code, verified=False)
                 email = user.email
                 worker = Worker.objects.get(email=email)
                 worker.waiting_verified = False
                 worker.save()
                 user.delete()
             return render(request, "http_response/google-500.html", status=500)
-    except (AuthMissingParameter, AttributeError) as e:
+    except (AuthMissingParameter, AttributeError, Code.DoesNotExist) as e:
         return render(request, "http_response/page-500.html", status=500)
