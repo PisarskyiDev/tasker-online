@@ -161,4 +161,6 @@ def permission_denied(request, exception):
 
 
 def server_error(request):
+    if "google-oauth2" in request.backend.name:
+        return render(request, "http_response/google-500.html", status=500)
     return render(request, "http_response/page-500.html", status=500)
