@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     "catalog",
     "social_django",
     "user",
-    "auth_verification",
     "tokens",
 ]
 
@@ -158,7 +157,6 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_uid",
     "social_core.pipeline.social_auth.auth_allowed",
     "social_core.pipeline.social_auth.social_user",
-    "user.custom_pipeline.check_user_validation",
     "social_core.pipeline.user.get_username",
     "social_core.pipeline.social_auth.associate_by_email",
     "user.custom_pipeline.create_user",
@@ -167,17 +165,11 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.social_auth.associate_by_email",
     "social_core.pipeline.user.user_details",
-    "user.custom_pipeline.mail_validation",
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-EMAIL_VALIDATION_URL = "/"
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = (
-    "auth_verification.send_email.send_email_verification"
-)
-SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = True
-SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = False  # TODO CHEck how this work
+SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = True
 SOCIAL_AUTH_USER_MODEL = "user.Worker"
 SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ["username", "first_name", "last_name"]
 SOCIAL_AUTH_SESSION_EXPIRATION = True
