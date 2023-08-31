@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "can't be empty because test not pas
 # SECURITY WARNING: don't run with debug turned on in production!
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 RAISE_EXCEPTIONS = True
-DEBUG = True
+DEBUG = True if os.getenv("DEBUG") else False
 
 INTERNAL_IPS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     "catalog",
     "social_django",
     "user",
-    "auth",
+    "auth_verification",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -171,7 +171,9 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 EMAIL_VALIDATION_URL = "/"
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = "auth.send_email.send_email_verification"
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = (
+    "auth_verification.send_email.send_email_verification"
+)
 SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = True
 SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = False  # TODO CHEck how this work
 SOCIAL_AUTH_USER_MODEL = "user.Worker"
