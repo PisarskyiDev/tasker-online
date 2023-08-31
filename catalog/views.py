@@ -1,13 +1,16 @@
 from datetime import date
 
+from social_core.exceptions import AuthMissingParameter
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction, OperationalError
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.http import require_POST
+from social_django.models import Code
 
 from .forms import (
     LoginForm,
@@ -161,6 +164,16 @@ def permission_denied(request, exception):
 
 
 def server_error(request):
-    if "google-oauth2" in request.backend.name:
-        return render(request, "http_response/google-500.html", status=500)
-    return render(request, "http_response/page-500.html", status=500)
+    try:
+        if "google-oauth2" in request.backend.name:
+            with transaction.atomic():
+                old_code = request.GET.get("verification_code")
+                user = Code.objects.get(code=old_code)
+                email = user.email
+                worker = Worker.objects.get(email=email)
+                worker.waiting_verified = False
+                worker.save()
+                user.delete()
+            return render(request, "http_response/google-500.html", status=500)
+    except (AuthMissingParameter, AttributeError) as e:
+        return render(request, "http_response/page-500.html", status=500)
