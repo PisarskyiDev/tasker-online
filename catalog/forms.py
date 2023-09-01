@@ -1,7 +1,8 @@
 from datetime import date
 
-from django.contrib.auth import forms as auth
+from django.contrib.auth import forms as auth, authenticate
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import DateInput
 
 from .models import Task
@@ -9,6 +10,32 @@ from user.models import Worker
 
 
 class LoginForm(auth.AuthenticationForm):
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+        wait_verification = Worker.objects.filter(
+            email=username, is_active=False, waiting_verified=True
+        )
+        try:
+            passwords_match = wait_verification.get().check_password(password)
+        except Worker.DoesNotExist:
+            passwords_match = False
+        if username is not None and password:
+            self.user_cache = authenticate(
+                self.request, username=username, password=password
+            )
+            if wait_verification and passwords_match:
+                raise ValidationError(
+                    "This account is inactive. Check your email and activate your account.",
+                    code="inactive",
+                )
+            if self.user_cache is None:
+                raise self.get_invalid_login_error()
+            else:
+                self.confirm_login_allowed(self.user_cache)
+
+        return self.cleaned_data
+
     class Meta:
         model = Worker
 
