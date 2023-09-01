@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.contrib.auth import forms as auth
 from unittest.mock import patch
-from .models import Task, TaskType, Worker, Position
+from .models import Task, TaskType, Position
 from .forms import LoginForm, RegistrationForm
 from django.test import RequestFactory
 from django.urls import reverse
+from user.models import Worker
 
 
 class LoginFormTestCase(TestCase):

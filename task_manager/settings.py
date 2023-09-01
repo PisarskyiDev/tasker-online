@@ -19,7 +19,6 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -27,17 +26,17 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "can't be empty because test not passed")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+RAISE_EXCEPTIONS = True
+DEBUG = True if os.getenv("DEBUG") else False
 
 INTERNAL_IPS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
-    "127.0.0.1",
     "localhost",
 ]
 
 ALLOWED_HOSTS = [
     os.getenv("DJANGO_ALLOWED_HOST"),
-    "127.0.0.1",
     "localhost",
 ]
 
@@ -55,6 +54,8 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "catalog",
     "social_django",
+    "user",
+    "tokens",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -64,6 +65,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -95,18 +97,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "task_manager.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db.sqlite3",
+if os.getenv("DB_ENGINE") == "postgresql":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USERNAME"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": os.getenv("POSTGRES_PORT"),
+        }
     }
-}
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "db.sqlite3",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,22 +137,54 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "catalog.Worker"
+AUTH_USER_MODEL = "user.Worker"
 
 LOGIN_URL = "/"
 
 LOGIN_REDIRECT_URL = "/"
 
+# Start social_django settings
+
 AUTHENTICATION_BACKENDS = (
-    # ...
     "social_core.backends.google.GoogleOAuth2",
     "django.contrib.auth.backends.ModelBackend",
-    # ...
+)
+
+# –––––– CLEAN_USERNAMES = False
+
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.user.get_username",
+    "social_core.pipeline.social_auth.associate_by_email",
+    "user.custom_pipeline.create_user",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.social_auth.associate_by_email",
+    "social_core.pipeline.user.user_details",
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = True
+SOCIAL_AUTH_USER_MODEL = "user.Worker"
+SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ["username", "first_name", "last_name"]
+SOCIAL_AUTH_SESSION_EXPIRATION = True
 
+# –––––– End social_django settings
+
+# ----- Start gmail settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+# ----- End gmail settings
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -154,20 +197,22 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# ----- Start Whitenoise settings
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATIC_URL = "/staticfiles/"
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
-ASSETS_ROOT = STATIC_URL + "assets"
+ASSETS_ROOT = "/staticfiles/assets"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# ----- End Whitenoise settings
 
 
 # Default primary key field type
@@ -181,3 +226,19 @@ SESSION_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = []
 if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):
     CSRF_TRUSTED_ORIGINS += [f"http://{csrf_subdomain}", f"https://{csrf_subdomain}"]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": "task_manager.log",
+        },
+    },
+    "root": {
+        "handlers": ["file"],
+        "level": "ERROR",
+    },
+}

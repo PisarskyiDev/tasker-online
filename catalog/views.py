@@ -1,13 +1,6 @@
-from datetime import date
+import threading
 
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views import generic
-from django.views.decorators.http import require_POST
+import task_manager.settings
 
 from .forms import (
     LoginForm,
@@ -16,11 +9,31 @@ from .forms import (
     ProfileForm,
 )
 from .models import (
-    Worker,
     Task,
     TaskType,
     Position,
 )
+from user.models import Worker
+from tokens.account_activation_token import token_manager
+
+from social_django.models import Code
+from social_core.exceptions import AuthMissingParameter
+
+from datetime import date
+from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.views import generic
+from django.views.decorators.http import require_POST
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -64,10 +77,62 @@ class LoginView(generic.FormView):
             return self.form_invalid(form)
 
 
-class SignUpView(generic.CreateView):
-    form_class = RegistrationForm
-    success_url = reverse_lazy("catalog:login")
-    template_name = "accounts/register.html"
+def send_mail_in_thread(mail_subject, message, sender, recipient_list):
+    """
+    Function for sending an email in a separate thread.
+    """
+    send_mail(mail_subject, message, sender, recipient_list)
+
+
+def signup(request):
+    user_model = get_user_model()
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        form_valid = True if form.is_valid() else False
+        if form_valid:
+            user = form.save(commit=False)
+            user.is_active = False
+            user.waiting_verified = True
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = "Activate your account."
+            message = render_to_string(
+                "email/message.html",
+                {
+                    "user": user,
+                    "domain": current_site.domain,
+                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "token": token_manager.make_token(user),
+                },
+            )
+            to_email = form.cleaned_data.get("email")
+            sender = task_manager.settings.EMAIL_HOST_USER
+            mail_thread = threading.Thread(
+                target=send_mail_in_thread,
+                args=(mail_subject, message, sender, [to_email]),
+            )
+            mail_thread.start()
+
+            return render(request, "email/successful_registrate.html")
+    else:
+        form = RegistrationForm()
+    return render(request, "accounts/register.html", {"form": form})
+
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and token_manager.check_token(user, token):
+        user.is_active = True
+        user.waiting_verified = False
+        user.save()
+        return render(request, "email/activate.html")
+    else:
+        return render(request, "email/deactivate.html")
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
@@ -161,4 +226,16 @@ def permission_denied(request, exception):
 
 
 def server_error(request):
-    return render(request, "http_response/page-500.html", status=500)
+    try:
+        if "google-oauth2" in request.backend.name:
+            with transaction.atomic():
+                old_code = request.GET.get("verification_code")
+                user = Code.objects.get(code=old_code, verified=False)
+                email = user.email
+                worker = Worker.objects.get(email=email)
+                worker.waiting_verified = False
+                worker.save()
+                user.delete()
+            return render(request, "http_response/google-500.html", status=500)
+    except (AuthMissingParameter, AttributeError, Code.DoesNotExist) as e:
+        return render(request, "http_response/page-500.html", status=500)
