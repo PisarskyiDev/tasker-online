@@ -117,7 +117,7 @@ def activate(request, uidb64, token):
         user.save()
         return render(request, "email/activate.html")
     else:
-        return HttpResponse("Activation link is invalid!")
+        return render(request, "email/deactivate.html")
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
