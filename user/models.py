@@ -11,7 +11,9 @@ from catalog.models import Position
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(
+        self, email, password, is_staff, is_superuser, **extra_fields
+    ):
         if not email:
             raise ValueError("Users must have an email address")
         now = timezone.now()
@@ -39,8 +41,12 @@ class UserManager(BaseUserManager):
 
 
 class Worker(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=100, unique=True, null=True, blank=True)
-    position = models.ForeignKey(to=Position, on_delete=models.DO_NOTHING, null=True)
+    username = models.CharField(
+        max_length=100, unique=True, null=True, blank=True
+    )
+    position = models.ForeignKey(
+        to=Position, on_delete=models.DO_NOTHING, null=True
+    )
     email = models.EmailField(max_length=254, unique=True)
     first_name = models.CharField(max_length=254, null=True, blank=True)
     last_name = models.CharField(max_length=254, null=True, blank=True)
@@ -66,9 +72,6 @@ class Worker(AbstractBaseUser, PermissionsMixin):
             return self.username
         else:
             return self.email
-
-    # def get_absolute_url(self):
-    #     return "/users/%i/" % (self.pk) TODO: if new get_absolute_url dont work, change to it
 
     def get_absolute_url(self):
         return reverse(

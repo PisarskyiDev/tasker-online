@@ -26,7 +26,8 @@ class LoginForm(auth.AuthenticationForm):
             )
             if wait_verification and passwords_match:
                 raise ValidationError(
-                    "This account is inactive. Check your email and activate your account.",
+                    "This account is inactive. "
+                    "Check your email and activate your account.",
                     code="inactive",
                 )
             if self.user_cache is None:
@@ -104,7 +105,10 @@ class ProfileForm(forms.ModelForm):
         if current_user.is_superuser:
             self.fields["username"].required = True
         # <-- if current_user.is_superuser he can edit only own profile-->
-        if not current_user.is_superuser and self.instance.pk != current_user.id:
+        if (
+            not current_user.is_superuser
+            and self.instance.pk != current_user.id
+        ):
             self.fields["username"].disabled = True
             self.fields["first_name"].disabled = True
             self.fields["last_name"].disabled = True

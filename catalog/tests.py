@@ -61,7 +61,9 @@ class TaskModelTestCase(TestCase):
 class WorkerModelTestCase(TestCase):
     def setUp(self):
         self.position = Position.objects.create(name="Test Position")
-        self.worker = Worker.objects.create(username="testuser", position=self.position)
+        self.worker = Worker.objects.create(
+            username="testuser", position=self.position
+        )
 
     def test_worker_str_representation(self):
         self.assertEqual(str(self.worker), "testuser")
@@ -77,7 +79,9 @@ class WorkerModelTestCase(TestCase):
     def test_worker_get_absolute_url(self, mock_reverse):
         mock_reverse.return_value = "/catalog/profile/1/"
         url = self.worker.get_absolute_url()
-        mock_reverse.assert_called_once_with("catalog:profile_url_detail", args=["1"])
+        mock_reverse.assert_called_once_with(
+            "catalog:profile_url_detail", args=["1"]
+        )
         self.assertEqual(url, "/catalog/profile/1/")
 
 
