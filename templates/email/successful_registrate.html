@@ -1,0 +1,60 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %} Sign IN {% endblock %}
+
+{% block body_class %} sign-in-basic {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+    <style>
+    .form-control {
+      mask: 1px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+  {% include 'includes/navigation-transparent.html' %}
+
+  <div class="page-header align-items-start min-vh-100 animate__animated animate__fadeIn" style="background-image: url('{{ ASSETS_ROOT }}/img/bg_forest.jpeg')" loading="lazy">
+    <span class="mask bg-gradient-dark opacity-6"></span>
+    <div class="container my-auto" style="min-width: 350px">
+      <div class="row">
+        <div class="col-lg-4 col-md-8 col-12 mx-auto">
+          <div class="card z-index-0 fadeIn3 animate__animated animate__fadeIn fadeInBottom">
+            <a href="{% url 'catalog:index' %}">
+              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-dark shadow-primary border-radius-lg py-3 pe-1">
+                  <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
+                    Successful!
+                  </h4>
+                </div>
+              </div>
+            </a>
+          <div class="card-body">
+            <div class="card-body">
+              <h3>
+                Please confirm your email. We sent to your email message with a link to confirm.
+              </h3>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% include 'includes/footer-auth.html' %}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

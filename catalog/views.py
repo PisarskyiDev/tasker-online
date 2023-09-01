@@ -88,7 +88,7 @@ def signup(request):
             current_site = get_current_site(request)
             mail_subject = "Activate your account."
             message = render_to_string(
-                "email_template.html",
+                "email/message.html",
                 {
                     "user": user,
                     "domain": current_site.domain,
@@ -99,9 +99,7 @@ def signup(request):
             to_email = form.cleaned_data.get("email")
             sender = task_manager.settings.EMAIL_HOST_USER
             send_mail(mail_subject, message, sender, [to_email])
-            return HttpResponse(
-                "Please confirm your email address to complete the registration"
-            )
+            return render(request, "email/successful_registrate.html")
     else:
         form = RegistrationForm()
     return render(request, "accounts/register.html", {"form": form})
@@ -117,9 +115,7 @@ def activate(request, uidb64, token):
     if user is not None and token_manager.check_token(user, token):
         user.is_active = True
         user.save()
-        return HttpResponse(
-            "Thank you for your email confirmation. Now you can login your account."
-        )
+        return render(request, "email/activate.html")
     else:
         return HttpResponse("Activation link is invalid!")
 
