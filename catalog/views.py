@@ -1,25 +1,6 @@
-from datetime import date
-from social_core.exceptions import AuthMissingParameter
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import transaction
-from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views import generic
-from django.views.decorators.http import require_POST
-from social_django.models import Code
-
-from django.contrib.auth import get_user_model
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.sites.shortcuts import get_current_site
+import threading
 
 import task_manager.settings
-from tokens.account_activation_token import token_manager
-from django.core.mail import send_mail
-from django.utils.encoding import force_bytes, force_str
-from django.template.loader import render_to_string
 
 from .forms import (
     LoginForm,
@@ -33,6 +14,26 @@ from .models import (
     Position,
 )
 from user.models import Worker
+from tokens.account_activation_token import token_manager
+
+from social_django.models import Code
+from social_core.exceptions import AuthMissingParameter
+
+from datetime import date
+from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.views import generic
+from django.views.decorators.http import require_POST
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -74,6 +75,13 @@ class LoginView(generic.FormView):
             return super().form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+def send_mail_in_thread(mail_subject, message, sender, recipient_list):
+    """
+    Function for sending an email in a separate thread.
+    """
+    send_mail(mail_subject, message, sender, recipient_list)
 
 
 def signup(request):
