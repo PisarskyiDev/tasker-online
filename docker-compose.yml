@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  task_manager:
+  tasker_online:
     image: tasker_online:latest
     container_name: tasker_online
     volumes:
