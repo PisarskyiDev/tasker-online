@@ -13,21 +13,7 @@ services:
       - VIRTUAL_HOST=${TASKER_ONLINE_HOST}
       - LETSENCRYPT_HOST=${TASKER_ONLINE_HOST}
     command: >
-      bash -c "cd /pisarskyi/tasker_online && ./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
-
-  bot_ai:
-    image: bot_ai:latest
-    container_name: bot_ai
-    volumes:
-      - static_volume:/pisarskyi/static
-      - media_volume:/pisarskyi/media
-    env_file:
-      - .env
-    environment:
-      - VIRTUAL_HOST=${BOT_AI_ONLINE_HOST}
-      - LETSENCRYPT_HOST=${BOT_AI_ONLINE_HOST}
-    command: >
-      bash -c "cd /pisarskyi/bot_ai && ./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8001 core.wsgi:application"
+      bash -c "./tasker_online/manage.py collectstatic --noinput && ./tasker_online/manage.py migrate && cd tasker_online && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
 
   nginx:
     build:
@@ -38,15 +24,12 @@ services:
     volumes:
       - static_volume:/pisarskyi/tasker_online/static
       - media_volume:/pisarskyi/tasker_online/media
-      - bot_static_volume:/pisarskyi/bot_ai/static
-      - bot_media_volume:/pisarskyi/bot_ai/media
       - certs:/etc/nginx/certs
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
       - tasker_online
-      - bot_ai
     ports:
       - "${NGINX_EXTERNAL_PORT}:80"
       - "${NGINX_EXTERNAL_SSL_PORT}:443"
@@ -63,12 +46,7 @@ services:
 volumes:
   static_volume:
   media_volume:
-  bot_static_volume:
-  bot_media_volume:
   certs:
   vhost:
   html:
   acme:
-
-networks:
-  mynetwork:
