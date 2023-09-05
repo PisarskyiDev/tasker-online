@@ -6,10 +6,3 @@ location /media/tasker_online {
     alias /pisarskyi/tasker_online/media/;
 }
 
-location /static/bot_ai {
-    alias /pisarskyi/bot_ai/static;
-}
-
-location /media/bot_ai {
-    alias /pisarskyi/bot_ai/media;
-}
