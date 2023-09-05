@@ -36,8 +36,8 @@ services:
     container_name: docker_nginx
     image: docker_nginx
     volumes:
-      - static_volume:/user_tm/static
-      - media_volume:/user_tm/media
+      - static_volume:/pisarskyi/tasker_online/static
+      - media_volume:/pisarskyi/tasker_online/media
       - certs:/etc/nginx/certs
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
