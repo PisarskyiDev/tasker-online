@@ -33,12 +33,12 @@ RAISE_EXCEPTIONS = True
 DEBUG = True if os.getenv("DEBUG") else False
 
 INTERNAL_IPS = [
-    os.getenv("DJANGO_ALLOWED_HOST"),
+    os.getenv("TASKER_ONLINE_HOST"),
     "localhost",
 ]
 
 ALLOWED_HOSTS = [
-    os.getenv("DJANGO_ALLOWED_HOST"),
+    os.getenv("TASKER_ONLINE_HOST"),
     "localhost",
 ]
 
@@ -224,6 +224,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+TRUST_DOWNSTREAM_PROXY = True
 
 CSRF_TRUSTED_ORIGINS = []
 if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):

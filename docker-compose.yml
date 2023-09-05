@@ -10,8 +10,8 @@ services:
     env_file:
       - .env
     environment:
-      - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
-      - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
+      - VIRTUAL_HOST=${TASKER_ONLINE_HOST}
+      - LETSENCRYPT_HOST=${TASKER_ONLINE_HOST}
     command: >
       bash -c "cd /pisarskyi/tasker_online && ./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
 
@@ -24,8 +24,8 @@ services:
 #    env_file:
 #      - .env
 #    environment:
-#      - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
-#      - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
+#      - VIRTUAL_HOST=${BOT_AI_ONLINE_HOST}
+#      - LETSENCRYPT_HOST=${BOT_AI_ONLINE_HOST}
 #    command: >
 #      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
 
