@@ -16,7 +16,7 @@ libpq-dev libmariadb-dev libmariadb-dev-compat gettext cron openssh-client flake
 RUN useradd -rms /bin/zsh pisarskyi && chmod 777 /opt /run
 
 WORKDIR /pisarskyi
-RUN mkdir /pisarskyi/tasker_online/static && mkdir /pisarskyi/tasker_online/media
+RUN mkdir /pisarskyi/tasker_online && mkdir /pisarskyi/tasker_online/static && mkdir /pisarskyi/tasker_online/media
 RUN chown -R pisarskyi:pisarskyi /pisarskyi && chmod 755 /pisarskyi
 
 COPY --chown=pisarskyi:pisarskyi . ./tasker_online

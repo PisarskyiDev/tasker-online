@@ -38,6 +38,8 @@ services:
     volumes:
       - static_volume:/pisarskyi/tasker_online/static
       - media_volume:/pisarskyi/tasker_online/media
+      - bot_static_volume:/pisarskyi/bot_ai/static
+      - bot_media_volume:/pisarskyi/bot_ai/media
       - certs:/etc/nginx/certs
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
@@ -61,7 +63,12 @@ services:
 volumes:
   static_volume:
   media_volume:
+  bot_static_volume:
+  bot_media_volume:
   certs:
   vhost:
   html:
   acme:
+
+networks:
+  mynetwork:
