@@ -13,7 +13,7 @@ services:
       - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
       - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
     command: >
-      bash -c "tasker_online/manage.py collectstatic --noinput && tasker_online/manage.py migrate && gunicorn -b 0.0.0.0:8000 tasker_online.task_manager.wsgi:application"
+      bash -c "cd /pisarskyi/tasker_online && ./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
 
 #  bot_ai:
 #    image: bot_ai:latest
