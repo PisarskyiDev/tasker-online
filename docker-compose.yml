@@ -2,25 +2,39 @@ version: "2"
 
 services:
   task_manager:
-    image: task_manager_v1.04:latest
-    container_name: task_manager_v1.04
+    image: tasker_online:latest
+    container_name: tasker_online
     volumes:
-      - static_volume:/user_tm/static
-      - media_volume:/user_tm/media
+      - static_volume:/pisarskyi/tasker_online/static
+      - media_volume:/pisarskyi/tasker_online/media
     env_file:
       - .env
     environment:
       - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
       - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
     command: >
-      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
+      bash -c "tasker_online/manage.py collectstatic --noinput && tasker_online/manage.py migrate && gunicorn -b 0.0.0.0:8000 tasker_online.task_manager.wsgi:application"
+
+#  bot_ai:
+#    image: bot_ai:latest
+#    container_name: bot_ai
+#    volumes:
+#      - static_volume:/pisarskyi/static
+#      - media_volume:/pisarskyi/media
+#    env_file:
+#      - .env
+#    environment:
+#      - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
+#      - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
+#    command: >
+#      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
 
   nginx:
     build:
       dockerfile: ./Dockerfile
       context: ./docker/nginx/
-    container_name: task_manager_nginx
-    image: task_manager_nginx
+    container_name: docker_nginx
+    image: docker_nginx
     volumes:
       - static_volume:/user_tm/static
       - media_volume:/user_tm/media
@@ -29,14 +43,14 @@ services:
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
-      - task_manager
+      - tasker_online
     ports:
       - "${NGINX_EXTERNAL_PORT}:80"
       - "${NGINX_EXTERNAL_SSL_PORT}:443"
 
   acme_companion:
     image: nginxproxy/acme-companion:2.2
-    container_name: task_manager_acme_companion
+    container_name: docker_acme_companion
     volumes_from:
       - nginx
     volumes:
