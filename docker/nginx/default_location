@@ -1,7 +1,9 @@
 location /static/ {
     alias /pisarskyi/tasker_online/static/;
+    alias /pisarskyi/bot_ai/static;
 }
 
 location /media/ {
     alias /pisarskyi/tasker_online/media/;
+    alias /pisarskyi/bot_ai/media;
 }
