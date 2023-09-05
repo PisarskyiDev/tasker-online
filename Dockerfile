@@ -7,6 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 EXPOSE 8000
+EXPOSE 8001
 
 RUN pip install --upgrade pip
 
@@ -21,11 +22,9 @@ RUN mkdir /pisarskyi/tasker_online/static && mkdir /pisarskyi/tasker_online/medi
 RUN mkdir /pisarskyi/bot_ai/static && mkdir /pisarskyi/bot_ai/media && chown -R pisarskyi:pisarskyi /pisarskyi && chmod 755 /pisarskyi
 
 COPY --chown=pisarskyi:pisarskyi . ./tasker_online
-#COPY --chown=pisarskyi:pisarskyi ../bot_ai ./bot_ai
+COPY --chown=pisarskyi:pisarskyi ../bot_ai ./bot_ai
 
 RUN cd /pisarskyi/tasker_online && pip install -r requirements.txt
-RUN #cd /pisarskyi/bot_ai && pip install -r requirements.txt
+RUN cd /pisarskyi/bot_ai && pip install -r requirements.txt
 
 USER pisarskyi
-
-#CMD ["gunicorn, '-b", "0.0.0.0:8000", "task_manager.wsgi:application"]
