@@ -19,8 +19,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./docker/nginx/
-    container_name: docker_nginx
-    image: docker_nginx
+    container_name: tasker_nginx
+    image: tasker_nginx
     volumes:
       - static_volume:/pisarskyi/tasker_online/static
       - media_volume:/pisarskyi/tasker_online/media
@@ -36,7 +36,7 @@ services:
 
   acme_companion:
     image: nginxproxy/acme-companion:2.2
-    container_name: docker_acme_companion
+    container_name: tasker_acme_companion
     volumes_from:
       - nginx
     volumes:
