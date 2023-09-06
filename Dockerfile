@@ -16,7 +16,7 @@ libpq-dev libmariadb-dev libmariadb-dev-compat gettext cron openssh-client flake
 RUN useradd -rms /bin/zsh tasker && chmod 777 /opt /run
 
 WORKDIR /tasker
-RUN mkdir /tasker && mkdir /tasker/static && mkdir /tasker/media
+RUN mkdir /tasker/static && mkdir /tasker/media
 RUN chown -R tasker:tasker /tasker && chmod 755 /tasker
 
 COPY --chown=tasker:tasker . ./tasker_online
