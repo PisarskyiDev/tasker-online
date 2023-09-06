@@ -1,4 +1,6 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 def get_worker_model():
@@ -41,9 +43,7 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=True)
     priority = models.CharField(max_length=3, choices=STR_CHOICES)
     task_type = models.ForeignKey(to=TaskType, on_delete=models.DO_NOTHING)
-    assignees = models.ManyToManyField(
-        to=get_worker_model(), related_name="assignees"
-    )
+    assignees = models.ManyToManyField(to=get_worker_model(), related_name="assignees")
 
     def __str__(self):
         return self.name

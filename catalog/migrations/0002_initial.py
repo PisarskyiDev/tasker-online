@@ -25,8 +25,7 @@ class Migration(migrations.Migration):
             model_name="task",
             name="task_type",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.DO_NOTHING,
-                to="catalog.tasktype",
+                on_delete=django.db.models.deletion.DO_NOTHING, to="catalog.tasktype"
             ),
         ),
     ]

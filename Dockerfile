@@ -19,7 +19,7 @@ WORKDIR /tasker
 RUN mkdir /tasker/static && mkdir /tasker/media
 RUN chown -R tasker:tasker /tasker && chmod 755 /tasker
 
-COPY --chown=tasker:tasker . ./tasker_online
+COPY --chown=tasker:tasker . .
 
 RUN pip install -r requirements.txt
 
