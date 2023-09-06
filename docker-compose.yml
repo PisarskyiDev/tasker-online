@@ -5,15 +5,15 @@ services:
     image: tasker_online:latest
     container_name: tasker_online
     volumes:
-      - static_volume:/pisarskyi/tasker_online/static
-      - media_volume:/pisarskyi/tasker_online/media
+      - static_volume:/tasker/static
+      - media_volume:/tasker/media
     env_file:
       - .env
     environment:
       - VIRTUAL_HOST=${TASKER_ONLINE_HOST}
       - LETSENCRYPT_HOST=${TASKER_ONLINE_HOST}
     command: >
-      bash -c "./tasker_online/manage.py collectstatic --noinput && ./tasker_online/manage.py migrate && cd tasker_online && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
+      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 --workers 4 --threads 2 task_manager.wsgi:application"
 
   nginx:
     build:
@@ -22,8 +22,8 @@ services:
     container_name: tasker_nginx
     image: tasker_nginx
     volumes:
-      - static_volume:/pisarskyi/tasker_online/static
-      - media_volume:/pisarskyi/tasker_online/media
+      - static_volume:/tasker/static
+      - media_volume:/tasker/media
       - certs:/etc/nginx/certs
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html

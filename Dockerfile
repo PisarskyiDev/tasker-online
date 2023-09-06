@@ -13,14 +13,16 @@ RUN pip install --upgrade pip
 RUN apt update && apt -qy install gcc libjpeg-dev libxslt-dev \
 libpq-dev libmariadb-dev libmariadb-dev-compat gettext cron openssh-client flake8 locales
 
-RUN useradd -rms /bin/zsh pisarskyi && chmod 777 /opt /run
+RUN useradd -rms /bin/zsh tasker && chmod 777 /opt /run
 
-WORKDIR /pisarskyi
-RUN mkdir /pisarskyi/tasker_online && mkdir /pisarskyi/tasker_online/static && mkdir /pisarskyi/tasker_online/media
-RUN chown -R pisarskyi:pisarskyi /pisarskyi && chmod 755 /pisarskyi
+WORKDIR /tasker
+RUN mkdir /tasker && mkdir /tasker/static && mkdir /tasker/media
+RUN chown -R tasker:tasker /tasker && chmod 755 /tasker
 
-COPY --chown=pisarskyi:pisarskyi . ./tasker_online
+COPY --chown=tasker:tasker . ./tasker_online
 
-RUN cd /pisarskyi/tasker_online && pip install -r requirements.txt
+RUN cd /tasker && pip install -r requirements.txt
 
-USER pisarskyi
+USER tasker
+
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "--workers", "4", "--threads", "2", "task_manager.wsgi:application"]
