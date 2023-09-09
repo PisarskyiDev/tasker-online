@@ -1,4 +1,4 @@
-version: "2"
+version: "3" #2
 
 services:
   tasker_online:
@@ -9,49 +9,16 @@ services:
       - media_volume:/tasker/media
     env_file:
       - .env
+    ports:
+      - "8000:8000"
     environment:
       - VIRTUAL_HOST=${TASKER_ONLINE_HOST}
       - LETSENCRYPT_HOST=${TASKER_ONLINE_HOST}
     command: >
       bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 --workers 4 --threads 2 task_manager.wsgi:application"
-    networks:
-      - bot_network # Подключение к созданной сети
 
-
-  nginx:
-    build:
-      dockerfile: ./Dockerfile
-      context: ./docker/nginx/
-    container_name: tasker_nginx
-    image: tasker_nginx
-    volumes:
-      - static_volume:/tasker/static
-      - media_volume:/tasker/media
-      - certs:/etc/nginx/certs
-      - vhost:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    ports:
-      - "${NGINX_EXTERNAL_PORT}:80"
-      - "${NGINX_EXTERNAL_SSL_PORT}:443"
-
-  acme_companion:
-    image: nginxproxy/acme-companion:2.2
-    container_name: tasker_acme_companion
-    volumes_from:
-      - nginx
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - acme:/etc/acme.sh
 
 volumes:
   static_volume:
   media_volume:
-  certs:
-  vhost:
-  html:
-  acme:
 
-networks:
-  bot_network:
-    driver: bridge
