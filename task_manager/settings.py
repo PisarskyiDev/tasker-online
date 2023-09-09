@@ -23,7 +23,9 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "can't be empty because test not passed")
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY", "can't be empty because test not passed"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True
@@ -50,12 +52,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "rest_framework",
     "crispy_forms",
     "crispy_bootstrap5",
     "catalog",
     "social_django",
     "user",
     "tokens",
+    "api",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -226,7 +230,10 @@ TRUST_DOWNSTREAM_PROXY = True
 
 CSRF_TRUSTED_ORIGINS = []
 if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):
-    CSRF_TRUSTED_ORIGINS += [f"http://{csrf_subdomain}", f"https://{csrf_subdomain}"]
+    CSRF_TRUSTED_ORIGINS += [
+        f"http://{csrf_subdomain}",
+        f"https://{csrf_subdomain}",
+    ]
 
 LOGGING = {
     "version": 1,
