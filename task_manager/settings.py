@@ -33,13 +33,17 @@ RAISE_EXCEPTIONS = True
 DEBUG = True if os.getenv("DEBUG") else False
 
 INTERNAL_IPS = [
-    os.getenv("TASKER_ONLINE_HOST"),
+    os.getenv("TASKER_ONLINE_HOST1"),
+    os.getenv("TASKER_ONLINE_HOST2"),
     "localhost",
+    "0.0.0.0",
 ]
 
 ALLOWED_HOSTS = [
-    os.getenv("TASKER_ONLINE_HOST"),
+    os.getenv("TASKER_ONLINE_HOST1"),
+    os.getenv("TASKER_ONLINE_HOST2"),
     "localhost",
+    "0.0.0.0",
 ]
 
 # Application definition
@@ -240,13 +244,13 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "level": "ERROR",
+            "level": "INFO",
             "class": "logging.FileHandler",
             "filename": "task_manager.log",
         },
     },
     "root": {
         "handlers": ["file"],
-        "level": "ERROR",
+        "level": "INFO",
     },
 }
