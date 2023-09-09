@@ -29,5 +29,7 @@ urlpatterns = [
     path("", include("catalog.urls", namespace="catalog")),
     path("admin/", admin.site.urls),
     path("social-auth/", include("social_django.urls", namespace="social")),
+    path("api/auth/", include("rest_framework.urls", namespace="rest_login")),
+    path("api/", include("api.urls", namespace="main_api")),
     path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

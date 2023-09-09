@@ -1,52 +1,24 @@
-version: "2"
+version: "3" #2
 
 services:
-  task_manager:
-    image: task_manager_v1.04:latest
-    container_name: task_manager_v1.04
+  tasker_online:
+    image: tasker_online:latest
+    container_name: tasker_online
     volumes:
-      - static_volume:/user_tm/static
-      - media_volume:/user_tm/media
+      - static_volume:/tasker/static
+      - media_volume:/tasker/media
     env_file:
       - .env
-    environment:
-      - VIRTUAL_HOST=${DJANGO_ALLOWED_HOST}
-      - LETSENCRYPT_HOST=${DJANGO_ALLOWED_HOST}
-    command: >
-      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 task_manager.wsgi:application"
-
-  nginx:
-    build:
-      dockerfile: ./Dockerfile
-      context: ./docker/nginx/
-    container_name: task_manager_nginx
-    image: task_manager_nginx
-    volumes:
-      - static_volume:/user_tm/static
-      - media_volume:/user_tm/media
-      - certs:/etc/nginx/certs
-      - vhost:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    depends_on:
-      - task_manager
     ports:
-      - "${NGINX_EXTERNAL_PORT}:80"
-      - "${NGINX_EXTERNAL_SSL_PORT}:443"
+      - "8000:8000"
+    environment:
+      - VIRTUAL_HOST=${TASKER_ONLINE_HOST}
+      - LETSENCRYPT_HOST=${TASKER_ONLINE_HOST}
+    command: >
+      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 --workers 4 --threads 2 task_manager.wsgi:application"
 
-  acme_companion:
-    image: nginxproxy/acme-companion:2.2
-    container_name: task_manager_acme_companion
-    volumes_from:
-      - nginx
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - acme:/etc/acme.sh
 
 volumes:
   static_volume:
   media_volume:
-  certs:
-  vhost:
-  html:
-  acme:
+

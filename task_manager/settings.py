@@ -33,13 +33,17 @@ RAISE_EXCEPTIONS = True
 DEBUG = True if os.getenv("DEBUG") else False
 
 INTERNAL_IPS = [
-    os.getenv("DJANGO_ALLOWED_HOST"),
+    os.getenv("TASKER_ONLINE_HOST1"),
+    os.getenv("TASKER_ONLINE_HOST2"),
     "localhost",
+    "0.0.0.0",
 ]
 
 ALLOWED_HOSTS = [
-    os.getenv("DJANGO_ALLOWED_HOST"),
+    os.getenv("TASKER_ONLINE_HOST1"),
+    os.getenv("TASKER_ONLINE_HOST2"),
     "localhost",
+    "0.0.0.0",
 ]
 
 # Application definition
@@ -52,12 +56,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "rest_framework",
     "crispy_forms",
     "crispy_bootstrap5",
     "catalog",
     "social_django",
     "user",
     "tokens",
+    "api",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -224,6 +230,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+TRUST_DOWNSTREAM_PROXY = True
 
 CSRF_TRUSTED_ORIGINS = []
 if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):
@@ -237,13 +244,13 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "level": "ERROR",
+            "level": "INFO",
             "class": "logging.FileHandler",
             "filename": "task_manager.log",
         },
     },
     "root": {
         "handlers": ["file"],
-        "level": "ERROR",
+        "level": "INFO",
     },
 }
