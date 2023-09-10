@@ -1,8 +1,0 @@
-location /static/tasker {
-    alias /tasker/static/;
-}
-
-location /media/tasker_online {
-    alias /tasker/media/;
-}
-
