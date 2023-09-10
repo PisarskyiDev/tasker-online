@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import logging
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
@@ -261,18 +263,4 @@ if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):
         f"https://{csrf_subdomain}",
     ]
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": "task_manager.log",
-        },
-    },
-    "root": {
-        "handlers": ["file"],
-        "level": "INFO",
-    },
-}
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
