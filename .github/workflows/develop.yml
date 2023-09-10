@@ -1,0 +1,16 @@
+name: Deploy to Server
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop_both # Здесь укажите вашу основную ветку, которая должна запускать деплой
+
+
+jobs:
+  deploy:
+    name: deploy to staging
+    runs-on: self-hosted
+    steps:
+      - name: SSH deploy
+        run: cd .. && pwd && sh deploy_tasker.sh
