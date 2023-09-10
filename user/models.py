@@ -63,20 +63,15 @@ class Worker(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        verbose_name = "Worker"
-        verbose_name_plural = "Workers"
+        verbose_name = "User"
+        verbose_name_plural = "Users"
         ordering = ["position"]
 
     def __str__(self):
-        if self.username:
-            return self.username
-        else:
-            return self.email
+        return self.username
 
-    # def get_absolute_url(self):
-    #     return "/users/%i/" % (self.pk) TODO: if new get_absolute_url dont work, change to it
+    def get_username(self):
+        return self.username
 
     def get_absolute_url(self):
-        return reverse(
-            "catalog:profile_url_detail", args=[str(self.id)]
-        )  # TODO: check url to profile
+        return reverse("catalog:profile_url_detail", args=[str(self.id)])

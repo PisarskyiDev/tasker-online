@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <nav class="navbar navbar-expand-lg blur border-radius-xl mt-4 top-0 z-index-3 shadow-primary position-absolute my-3 py-2 start-0 end-0 mx-4">
-        <div class="container-fluid px-0" style="justify-content: right; max-">
+        <div class="container-fluid px-0" style="justify-content: right;">
           <ul class="navbar-nav navbar-nav-hover pb-2 py-lg-0 w-100">
 
           </ul>
@@ -17,12 +17,11 @@
               <span class="navbar-toggler-bar bar3"></span>
             </span>
           </button>
-          <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
+          <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation" style="min-width:150px">
             <ul class="navbar-nav navbar-nav-hover ms-auto">
-              <li class="nav-item my-auto ms-3 ms-lg-0">
-            <a href="https://github.com/Soobig666/it-company-task-manager/"  type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark mb-0 me-1 mt-2 mt-md-0">Project on GitHub</a>
+              <li class="nav-item">
+              <a href="https://github.com/Soobig666/it-company-task-manager/"  type="button" class="btn btn-sm btn-outline-secondary bg-gradient-dark mb-0 me-1 mt-2 mt-md-0">GitHub</a>
               </li>
-
               <li>
                 <a class="dropdown-item border-radius-md" href="{% url 'catalog:index' %}" rel="tooltip" title="Home page" data-placement="bottom">
                   Home
@@ -41,10 +40,10 @@
                     </a>
                   </div>
                     <div class="shadow-dark rounded-3 nav-item ms-lg-auto" >
-                      <a class="nav-link nav-link-icon me-2"
+                      <a class="nav-link nav-link-icon"
                         href="{% url 'catalog:logout' %}?next={{ request.path }}">
-                        <i class="fa rounded-3 fa-sign-out me-1"></i>
-                        <p class="d-inline  text-sm z-index-1 font-weight-bold " data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT">Logout</p>
+                        <i class="fa rounded-3 fa-sign-out"></i>
+                        <p class="d-inline  text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign OUT"></p>
                       </a>
                     </div>
                 {% else %}
