@@ -257,10 +257,15 @@ SESSION_COOKIE_SECURE = True
 TRUST_DOWNSTREAM_PROXY = True
 
 CSRF_TRUSTED_ORIGINS = []
-if csrf_subdomain := os.getenv("CSRF_SUBDOMAIN"):
+if csrf_subdomain_1 := os.getenv("CSRF_SUBDOMAIN1"):
     CSRF_TRUSTED_ORIGINS += [
-        f"http://{csrf_subdomain}",
-        f"https://{csrf_subdomain}",
+        f"http://{csrf_subdomain_1}",
+        f"https://{csrf_subdomain_1}",
+    ]
+if csrf_subdomain_2 := os.getenv("CSRF_SUBDOMAIN2"):
+    CSRF_TRUSTED_ORIGINS += [
+        f"http://{csrf_subdomain_2}",
+        f"https://{csrf_subdomain_2}",
     ]
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
