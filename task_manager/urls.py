@@ -34,5 +34,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("social-auth/", include("social_django.urls", namespace="social")),
     path("api_telegram/", include("api.urls", namespace="api")),
+    path("api_telegram/", include("rest_framework.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
