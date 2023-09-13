@@ -13,7 +13,7 @@
 
 Live version: [Tasker Online](https://parra-bellum.net)
 
-login: user\
+login: user@test.com\
 password: user12345
 
 ## Developing
