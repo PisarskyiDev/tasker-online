@@ -11,12 +11,8 @@ services:
       - .env
     ports:
       - "8000:8000"
-    environment:
-      - VIRTUAL_HOST=${TASKER_ONLINE_HOST}
-      - LETSENCRYPT_HOST=${TASKER_ONLINE_HOST}
     command: >
       bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 --workers 4 --threads 2 task_manager.wsgi:application"
-
 
 volumes:
   static_volume:

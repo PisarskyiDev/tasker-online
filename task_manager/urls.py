@@ -18,10 +18,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
 
 from catalog import views
 
@@ -32,8 +28,8 @@ handler500 = views.server_error
 urlpatterns = [
     path("", include("catalog.urls", namespace="catalog")),
     path("admin/", admin.site.urls),
-    path("social-auth/", include("social_django.urls", namespace="social")),
-    path("api_telegram/", include("api.urls", namespace="api")),
-    path("api_telegram/", include("rest_framework.urls")),
+    path("auth/", include("social_django.urls", namespace="social")),
+    path("api/", include("api.urls", namespace="api")),
+    path("api/", include("rest_framework.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
